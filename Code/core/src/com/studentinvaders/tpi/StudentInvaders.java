@@ -1,33 +1,44 @@
 package com.studentinvaders.tpi;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class StudentInvaders extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
+public class StudentInvaders extends Game {
+	Stage stage;
+	public SpriteBatch batch;
+	public BitmapFont font;
+
+	static public ScreenViewport viewport;
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		font = new BitmapFont(Gdx.files.internal("Font/KGWTW.fnt"));
+
+		viewport = new ScreenViewport();
+		stage = new Stage(viewport);
+
+		this.setScreen(new MainMenu(this));
+	}
+
+	public void gotoMenuScreen(){
+		SelectLanguages selectScreen = new SelectLanguages(this);
+		setScreen(selectScreen);
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		super.render();
 	}
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
 	}
 }
