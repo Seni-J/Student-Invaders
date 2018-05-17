@@ -29,7 +29,7 @@ public class StudentInvaders extends Game {
 		this.setScreen(new MainMenu(this));
 	}
 
-	public void gotoMenuScreen(){
+	public void gotoSelectScreen(){
 		SelectLanguages selectScreen = new SelectLanguages(this);
 		setScreen(selectScreen);
 	}

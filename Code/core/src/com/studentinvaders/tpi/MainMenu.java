@@ -29,6 +29,7 @@ public class MainMenu implements Screen {
     Texture bg = new Texture("Menu/bg-school.jpg");
 
     public MainMenu(final StudentInvaders game) {
+        VocProvider.load();
         this.game = game;
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
@@ -62,7 +63,7 @@ public class MainMenu implements Screen {
 
         if(keyPressed == true){
             game.stage.getActors().pop();
-            game.gotoMenuScreen();
+            game.gotoSelectScreen();
         }
         game.stage.act();
         game.stage.draw();
