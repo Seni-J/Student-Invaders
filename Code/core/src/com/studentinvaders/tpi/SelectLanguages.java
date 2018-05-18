@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
 
+import javax.management.monitor.GaugeMonitor;
 import javax.xml.soap.Text;
 
 /**
@@ -41,6 +42,8 @@ public class SelectLanguages implements Screen {
     int ylang = 450;
     int yvoc = 450;
     int i = 1;
+    int idVoc = 0;
+    boolean done = false;
 
 
     int proflangue;
@@ -98,17 +101,6 @@ public class SelectLanguages implements Screen {
             game.stage.addActor(lbllangue);
             game.stage.getActors().peek().setName(langue);
         }
-
-        /*for (Vocabulary vocabulaire : vocabulaires) {
-                final Label lblvocabulaire = new Label(vocabulaire.vocName, labelStyle);
-                lblvocabulaire.setFontScale(.3f);
-                lblvocabulaire.setPosition(800, yvoc);
-                lblvocabulaire.setSize(lblvocabulaire.getMinWidth(), lblvocabulaire.getMinHeight());
-                yvoc -= 50;
-                grpVoc.addActor(lblvocabulaire);
-        }
-        grpVoc.setName("Vocabulaires");
-        game.stage.addActor(grpVoc);*/
     }
 
     @Override
@@ -126,15 +118,14 @@ public class SelectLanguages implements Screen {
 
         checkIfCollide();
 
-
-        /*
+/*
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(profRect.x,profRect.y,profRect.width,profRect.height);
-        shapeRenderer.rect(game.stage.getActors().get(1).getX(),game.stage.getActors().get(1).getY(),game.stage.getActors().get(1).getWidth(),game.stage.getActors().get(1).getHeight());
-        shapeRenderer.rect(game.stage.getActors().get(2).getX(),game.stage.getActors().get(2).getY(),game.stage.getActors().get(2).getWidth(),game.stage.getActors().get(2).getHeight());
-        shapeRenderer.end();*/
-
+        shapeRenderer.rect(game.stage.getActors().get(3).getX(),game.stage.getActors().get(3).getY(),game.stage.getActors().get(3).getWidth(),game.stage.getActors().get(3).getHeight());
+        shapeRenderer.rect(game.stage.getActors().get(4).getX(),game.stage.getActors().get(4).getY(),game.stage.getActors().get(4).getWidth(),game.stage.getActors().get(4).getHeight());
+        shapeRenderer.end();
+*/
 
         game.stage.draw();
 
@@ -180,8 +171,8 @@ public class SelectLanguages implements Screen {
         langueChoisiEleve.setSize(langueChoisiEleve.getMinWidth(), langueChoisiEleve.getMinHeight());
 
         // Fix issue when
-        if(once == true){
-            if (game.stage.getActors().get(game.stage.getActors().size - 2).toString().contains(String.valueOf(langues.get(langues.size() - 1)))) {
+        if(once){
+            if (game.stage.getActors().get(game.stage.getActors().size - 1).toString().contains(String.valueOf(langues.get(langues.size() - 1)))) {
                 game.stage.addActor(langueChoisiProf);
                 game.stage.addActor(langueChoisiEleve);
             }
@@ -201,19 +192,19 @@ public class SelectLanguages implements Screen {
             Rectangle langueRect = new Rectangle(game.stage.getActors().get(i).getX(),game.stage.getActors().get(i).getY(),
                     game.stage.getActors().get(i).getWidth(),game.stage.getActors().get(i).getHeight());
 
-            if(langueRect.overlaps(profRect)) {
+            if(profRect.overlaps(langueRect)) {
                 proflangue = i;
                 if (!game.stage.getActors().peek().toString().contains(String.valueOf("JOUER"))) {
                     langueChoisiProf.setText("Langue choisie pour le prof: " + langue);
-                    if (!game.stage.getActors().get(game.stage.getActors().size - 1).toString().contains(String.valueOf(langueChoisiProf))) {
-                        game.stage.getActors().get(game.stage.getActors().size - 1).remove();
+                    if (!game.stage.getActors().get(game.stage.getActors().size - 2).toString().contains(String.valueOf(langueChoisiProf))) {
+                        game.stage.getActors().get(game.stage.getActors().size - 2).remove();
                         game.stage.addActor(langueChoisiProf);
-                        game.stage.getActors().swap(game.stage.getActors().size - 1, game.stage.getActors().size - 1);
+                        game.stage.getActors().swap(game.stage.getActors().size - 2, game.stage.getActors().size - 1);
                     }
                 }
             }
 
-            if(langueRect.overlaps(eleveRect)) {
+            if(eleveRect.overlaps(langueRect)) {
                 elevelangue = i;
                 if (!game.stage.getActors().peek().toString().contains(String.valueOf("JOUER"))) {
                     langueChoisiEleve.setText("Langue choisie pour l'élève: " + langue);
@@ -225,22 +216,10 @@ public class SelectLanguages implements Screen {
             }
         }
 
-        for (Vocabulary vocabulaire : vocabulaires) {
-            if(vocabulaire.langeleve == elevelangue && vocabulaire.langprof == proflangue){
-                /*****/
-            }
-        }
-
 
         if (proflangue != 0 && elevelangue != 0 && elevelangue != proflangue) {
             Label jouer = new Label("JOUER", labelStyle);
             jouer.setPosition(800, 0);
-
-            Label lblvocs = new Label("Vocabulaires", labelStyle);
-            lblvocs.setFontScale(.2f);
-            lblvocs.setPosition(800, 480);
-            //game.stage.addActor(lblvocs);
-
 
             jouer.addListener(new InputListener() {
                 @Override
@@ -250,8 +229,48 @@ public class SelectLanguages implements Screen {
                 }
             });
 
+            Label lblvocs = new Label("Vocabulaires", labelStyle);
+            lblvocs.setFontScale(.3f);
+            lblvocs.setPosition(800, 480);
+
+            if(!done) {
+                grpVoc.addActor(lblvocs);
+                for (final Vocabulary vocabulaire : vocabulaires) {
+                    if (vocabulaire.langeleve == elevelangue && vocabulaire.langprof == proflangue) {
+                        final Label lblvocabulaire = new Label(vocabulaire.vocName, labelStyle);
+                        lblvocabulaire.setFontScale(.3f);
+                        lblvocabulaire.setPosition(800, yvoc);
+                        lblvocabulaire.setSize(lblvocabulaire.getMinWidth(), lblvocabulaire.getMinHeight());
+                        yvoc -= 75;
+
+                        lblvocabulaire.addListener(new InputListener() {
+                            @Override
+                            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                                if (lblvocabulaire.getColor().equals(Color.BLUE)) {
+                                    lblvocabulaire.setColor(Color.WHITE);
+                                } else {
+                                    lblvocabulaire.setColor(Color.BLUE);
+                                    idVoc = vocabulaire.id;
+                                }
+                                return super.touchDown(event, x, y, pointer, button);
+                            }
+                        });
+
+                        grpVoc.addActor(lblvocabulaire);
+                    }
+                    grpVoc.setName("Vocabulaires");
+                }
+                if (game.stage.getRoot().findActor("Vocabulaires") == null && proflangue != 0 && elevelangue != 0) {
+                    game.stage.addActor(grpVoc);
+                }
+                done = true;
+            }
             if (!game.stage.getActors().peek().toString().contains(String.valueOf("JOUER"))) {
                 game.stage.addActor(jouer);
+            }
+
+            if(idVoc != 0){
+                game.stage.getActors().peek().setColor(Color.RED);
             }
         }
 

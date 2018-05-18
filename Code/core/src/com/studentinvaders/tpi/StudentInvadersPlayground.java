@@ -5,18 +5,24 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by Senistan.JEGARAJASIN on 15.05.2018.
  */
 
-public class StudentInvadersPlayground implements Screen {
+public class StudentInvadersPlayground extends Actor implements Screen{
     final StudentInvaders game;
 
-    static Array<Sprite> box;
+    static Array<Sprite> boxes;
     Texture bg;
     Texture boxTexture;
+    Teacher teacher;
+
+    boolean removeFirst = true;
 
 
 
@@ -24,16 +30,31 @@ public class StudentInvadersPlayground implements Screen {
         this.game = game;
         bg = new Texture("Game/bg_game.jpg");
         boxTexture = new Texture("Game/Box.png");
+        teacher = new Teacher();
 
-        box = new Array<Sprite>();
+        boxes = new Array<Sprite>();
+
+
+        //Effacer les anciens acteurs (Labels).
+        game.stage.getRoot().clearChildren();
+
+        teacher.setPosition(500,150);
+
         for(int i=0; i< 4;i++) {
-            box.insert(i, new Sprite(boxTexture));
+            boxes.insert(i, new Sprite(boxTexture));
             if(i != 0) {
-                box.get(i).setPosition(box.get(i-1).getX() + box.get(i - 1).getWidth() + 50,box.get(i).getY());
+                boxes.get(i).setPosition(boxes.get(i-1).getX() + boxes.get(i - 1).getWidth() + 50,boxes.get(i).getY());
             }
         }
 
+        teacher.addListener(new InputListener(){
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
 
+        game.stage.addActor(teacher);
     }
 
     @Override
@@ -45,8 +66,10 @@ public class StudentInvadersPlayground implements Screen {
     public void render(float delta) {
         game.batch.begin();
         game.batch.draw(bg,0,0, game.viewport.getScreenWidth(),game.viewport.getScreenHeight());
-        //for(Actor box : )
+        //teacher.Move(0.2f,0.2f);
         game.batch.end();
+
+        game.stage.draw();
 
     }
 
