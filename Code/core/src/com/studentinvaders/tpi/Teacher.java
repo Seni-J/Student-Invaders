@@ -18,10 +18,6 @@ public class Teacher extends Actor{
         this.spriteTeacher.setBounds(0,0,spriteTeacher.getWidth()/6,spriteTeacher.getHeight()/6);
     }
 
-    public void Move(float x, float y){
-        this.moveBy(x,y);
-    }
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
         spriteTeacher.draw(batch);

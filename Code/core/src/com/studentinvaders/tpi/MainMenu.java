@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by Senistan.JEGARAJASIN on 15.05.2018.
@@ -24,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 public class MainMenu implements Screen {
 
     final StudentInvaders game;
+    Viewport viewport;
     boolean keyPressed = false;
 
     Texture bg = new Texture("Menu/bg-school.jpg");
@@ -31,6 +34,7 @@ public class MainMenu implements Screen {
     public MainMenu(final StudentInvaders game) {
         VocProvider.load();
         this.game = game;
+        viewport = new ScreenViewport();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.font;
