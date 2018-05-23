@@ -42,7 +42,7 @@ public class SelectLanguages implements Screen {
     int ylang = 450;
     int yvoc = 450;
     int i = 1;
-    int idVoc = 0;
+    public int idVoc = 0;
     boolean done = false;
 
 
@@ -221,14 +221,6 @@ public class SelectLanguages implements Screen {
             Label jouer = new Label("JOUER", labelStyle);
             jouer.setPosition(800, 0);
 
-            jouer.addListener(new InputListener() {
-                @Override
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    game.gotoGameScreen();
-                    return super.touchDown(event, x, y, pointer, button);
-                }
-            });
-
             Label lblvocs = new Label("Vocabulaires", labelStyle);
             lblvocs.setFontScale(.3f);
             lblvocs.setPosition(800, 480);
@@ -265,31 +257,24 @@ public class SelectLanguages implements Screen {
                 }
                 done = true;
             }
+
             if (!game.stage.getActors().peek().toString().contains(String.valueOf("JOUER"))) {
+                jouer.addListener(new InputListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        if(game.stage.getActors().peek().getColor().equals(Color.RED))
+                        game.gotoGameScreen();
+                        return super.touchDown(event, x, y, pointer, button);
+                    }
+                });
                 game.stage.addActor(jouer);
             }
 
             if(idVoc != 0){
                 game.stage.getActors().peek().setColor(Color.RED);
+
             }
         }
-
-/*
-        if(!profRect.overlaps(frenchRect) && !profRect.overlaps(englishRect) && !profRect.overlaps(germanRect) && !profRect.overlaps(italianRect)){
-            proflangue = 0;
-            game.stage.getActors().get(game.stage.getActors().size - 2).remove();
-            game.stage.addActor(langueChoisiProf);
-            game.stage.getActors().swap(game.stage.getActors().size - 2, game.stage.getActors().size - 1);
-        }
-
-        if(!eleveRect.overlaps(frenchRect) && !eleveRect.overlaps(englishRect) && !eleveRect.overlaps(germanRect) && !eleveRect.overlaps(italianRect)){
-            if(elevelangue != 0) {
-                elevelangue = 0;
-                game.stage.getActors().pop();
-                game.stage.addActor(langueChoisiEleve);
-            }
-        }
-*/
     }
 
 }
