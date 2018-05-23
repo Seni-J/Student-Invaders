@@ -17,11 +17,16 @@ public class Words {
     int idWord;
     String wordTeacher;
     String wordPupil;
+    Boxes BoxProf;
+    Boxes BoxEleve;
 
     Words(int vocID, int idWord, String wordTeacher, String wordPupil){
         this.vocID = vocID;
         this.idWord = idWord;
         this.wordTeacher = wordTeacher;
         this.wordPupil = wordPupil;
+
+        BoxProf = new Boxes(wordTeacher);
+        BoxEleve = new Boxes(wordPupil);
     }
 }

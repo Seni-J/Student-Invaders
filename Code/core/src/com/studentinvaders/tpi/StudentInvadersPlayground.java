@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.ArrayList;
 
+import javax.swing.Box;
+
 /**
  * Created by Senistan.JEGARAJASIN on 15.05.2018.
  */
@@ -16,7 +18,9 @@ import java.util.ArrayList;
 public class StudentInvadersPlayground extends Actor implements Screen{
     final StudentInvaders game;
 
-    ArrayList<Boxes> boxes;
+    ArrayList<Words> wordProf;
+    ArrayList<Boxes> listBoxesProf;
+    ArrayList<Boxes> listBoxesEleve;
 
     Texture bg;
     Texture boxTexture;
@@ -40,6 +44,8 @@ public class StudentInvadersPlayground extends Actor implements Screen{
 
         shapeRenderer = new ShapeRenderer();
 
+        wordProf = VocProvider.getWords();
+
 
         //Effacer les anciens acteurs (Labels).
         game.stage.getRoot().clearChildren();
@@ -49,6 +55,11 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         leftSide.set(0,teacher.getY(),200,teacher.spriteTeacher.getHeight());
         rightSide.set(game.viewport.getScreenWidth() - 200,teacher.getY(), 200,teacher.spriteTeacher.getHeight());
 
+        for (Words word: wordProf) {
+            Gdx.app.log("test", word.BoxEleve.toString());
+            listBoxesProf.add(new Boxes(word.wordTeacher));
+            //listBoxesEleve.add(word.BoxEleve);
+        }
 
 
         /*
@@ -78,6 +89,7 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         game.batch.end();
 
         MoveTeacher();
+        //Gdx.app.log("Prof", listBoxesProf.toString());
  /*       Gdx.app.log("Box 1",Float.toString(boxes.get(0).getX()));
         Gdx.app.log("Box 2", Float.toString(boxes.get(1).getX()));
 
