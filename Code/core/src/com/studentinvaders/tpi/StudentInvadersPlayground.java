@@ -2,11 +2,17 @@ package com.studentinvaders.tpi;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
+import java.text.ParsePosition;
 import java.util.ArrayList;
 
 import javax.swing.Box;
@@ -18,13 +24,16 @@ import javax.swing.Box;
 public class StudentInvadersPlayground extends Actor implements Screen{
     final StudentInvaders game;
 
-    ArrayList<Words> wordProf;
-    ArrayList<Boxes> listBoxesProf;
-    ArrayList<Boxes> listBoxesEleve;
+    ArrayList<Words> words;
+    ArrayList<Actor> boxTeachers;
+    ArrayList<Actor> boxStudents;
 
     Texture bg;
     Texture boxTexture;
     Teacher teacher;
+    int length = 50;
+    int sendFlight = 0;
+    int indexvisible;
 
     Rectangle leftSide;
     Rectangle rightSide;
@@ -41,10 +50,12 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         teacher = new Teacher();
         leftSide = new Rectangle();
         rightSide = new Rectangle();
+        boxTeachers = new ArrayList<Actor>();
+        boxStudents = new ArrayList<Actor>();
 
         shapeRenderer = new ShapeRenderer();
 
-        wordProf = VocProvider.getWords();
+        words = VocProvider.getWords();
 
 
         //Effacer les anciens acteurs (Labels).
@@ -55,26 +66,31 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         leftSide.set(0,teacher.getY(),200,teacher.spriteTeacher.getHeight());
         rightSide.set(game.viewport.getScreenWidth() - 200,teacher.getY(), 200,teacher.spriteTeacher.getHeight());
 
-        for (Words word: wordProf) {
-            Gdx.app.log("test", word.BoxEleve.toString());
-            listBoxesProf.add(new Boxes(word.wordTeacher));
-            //listBoxesEleve.add(word.BoxEleve);
+        // Pour chaque mot du voc sélectionné, on crée des acteurs qu'on ajoute dans notre tableau boxTeacher pour les mots en bas.
+        for (Words word: words) {
+            if(word.type == Words.wordType.Teacher){
+                word.setBounds(word.box.getX(),word.box.getY(),word.box.getWidth(),word.box.getHeight());
+                boxTeachers.add(word);
+                boxTeachers.get(boxTeachers.size() - 1).setName(word.word);
+                if(boxTeachers.size() < 2){
+                    boxTeachers.get(0).setX(25);
+                }
+                if(boxTeachers.size() >= 2) {
+                    boxTeachers.get(boxTeachers.size() - 1).setPosition(boxTeachers.get(boxTeachers.size() - 2).getX() + boxTeachers.get(boxTeachers.size() - 2).getWidth() + 50,0);
+                }
+            }else if(word.type == Words.wordType.Student){
+                boxStudents.add(word);
+            }
         }
 
-
-        /*
-        //Création des boxes pour les mots
-        for(int i=0; i< 4;i++) {
-            boxes.insert(i, new Sprite(boxTexture));
-            if(i != 0) {
-                boxes.get(i).setPosition(boxes.get(i-1).getX() + boxes.get(i - 1).getWidth() + 50,boxes.get(i).getY());
-            }else{
-                boxes.get(i).setPosition(30,boxes.get(i).getY());
-            }
-            Gdx.app.log("Perimeters", Float.toString(boxes.get(i).getBoundingRectangle().perimeter()));
-        }*/
+        // Ajout d'acteur dans le tableau boxTeachers.
+        for(Actor boxTeacher: boxTeachers){
+            Gdx.app.log("Box",boxTeacher.toString());
+            game.stage.addActor(boxTeacher);
+        }
 
         game.stage.addActor(teacher);
+        game.stage.getActors().peek().setName("Prof");
     }
 
     @Override
@@ -88,18 +104,36 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         game.batch.draw(bg,0,0, game.viewport.getScreenWidth(),game.viewport.getScreenHeight());
         game.batch.end();
 
+        //Méthode pour bouger le prof.
         MoveTeacher();
-        //Gdx.app.log("Prof", listBoxesProf.toString());
- /*       Gdx.app.log("Box 1",Float.toString(boxes.get(0).getX()));
-        Gdx.app.log("Box 2", Float.toString(boxes.get(1).getX()));
 
+        //Si un avion est envoyé, on ne fait pas de check de mot. Cette condition est surtout là pour que l'avion continue son chemin sans qu'elle s'arrête à cause du input X et Y.
+        if(sendFlight == 1){
+            SendFlight();
+        }else{
+            CheckWordTaken();
+        }
+
+        //On regarde si l'avion en papier existe pour pouvoir le lancer. Si il l'existe, on vérifie si il est sorti de l'écran. Sinon, il est prêt à être lancer.
+        if(game.stage.getActors().peek().getName().toString().contains(String.valueOf("PaperFlight"))) {
+            if(game.stage.getActors().peek().getY() > 800){
+                sendFlight = 0;
+                game.stage.getActors().pop();
+                boxTeachers.get(indexvisible).setVisible(true);
+                teacher.changeImageback(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
+            }else {
+                if (Gdx.input.getX() > 0 && Gdx.input.getX() < 1280 && game.viewport.getScreenHeight() - Gdx.input.getY() > teacher.spriteTeacher.getY() + teacher.spriteTeacher.getHeight() && game.viewport.getScreenHeight() - Gdx.input.getY() < 800) {
+                    sendFlight = 1;
+                }
+            }
+        }
+
+/*
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.line(boxes.get(2).getX(),150,boxes.get(2).getWidth() + boxes.get(2).getX(),150);
-        shapeRenderer.rect(rightSide.x,rightSide.y,rightSide.width,rightSide.height);
-        shapeRenderer.circle(Gdx.input.getX(),game.viewport.getScreenHeight() - Gdx.input.getY(),30);
-        shapeRenderer.end();*/
-
+        shapeRenderer.rect(boxTeachers.get(0).getX() + 20,boxTeachers.get(0).getY() +20,boxTeachers.get(0).getWidth(),boxTeachers.get(0).getHeight());
+*/
+        shapeRenderer.end();
         game.stage.draw();
 
     }
@@ -142,7 +176,42 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         }
     }
 
-    public void CreatePaperFlight(){
+    public void SendFlight(){
+        game.stage.getRoot().findActor("PaperFlight").moveBy(0,3f);
+    }
+
+    public void CheckWordTaken(){
+        if(Gdx.input.getX() > 0 && Gdx.input.getX() < 1280 && game.viewport.getScreenHeight() - Gdx.input.getY() > 0 && game.viewport.getScreenHeight() - Gdx.input.getY() < 100){
+            for (Actor box: boxTeachers){
+                if(Gdx.input.getX() > box.getX() && Gdx.input.getX() < box.getX() + box.getWidth()){
+                    if(teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() > box.getX()
+                            && teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() < box.getX() + box.getWidth()) {
+                        teacher.changeImage(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
+                        for(Words word: words){
+                            if(!game.stage.getActors().peek().getName().contains(String.valueOf("PaperFlight"))) {
+                                if (box.toString().contains(String.valueOf(word.lblbox))) {
+                                    CreatePaperFlight(word.idWord);
+                                    box.setVisible(false);
+                                    indexvisible = box.getZIndex();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void CreatePaperFlight(int id){
+        int paperflightid = id;
+        Image PaperFlight = new Image(new SpriteDrawable(new Sprite(new Texture("Game/AvionEnPapier.png"))));
+
+        PaperFlight.setBounds(this.teacher.spriteTeacher.getX() + this.teacher.spriteTeacher.getWidth()/2,
+                this.teacher.spriteTeacher.getY() + this.teacher.spriteTeacher.getHeight()+20, PaperFlight.getWidth()/6,PaperFlight.getHeight()/6);
+        Gdx.app.log("X",Float.toString(PaperFlight.getX()));
+
+        game.stage.addActor(PaperFlight);
+        game.stage.getActors().peek().setName("PaperFlight");
 
     }
 }

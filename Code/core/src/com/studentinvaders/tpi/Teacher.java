@@ -25,7 +25,17 @@ public class Teacher extends Actor{
 
     @Override
     protected void positionChanged() {
-        spriteTeacher.setPosition(this.getX(),this.getY());
         super.positionChanged();
+        spriteTeacher.setPosition(this.getX(),this.getY());
     }
+
+    public void changeImage(float x,float y) {
+        this.spriteTeacher = new Sprite(new Texture("Game/ProfRetourne.png"));
+        this.spriteTeacher.setBounds(x,y,spriteTeacher.getWidth()/6,spriteTeacher.getHeight()/6);
+    }
+    public void changeImageback(float x,float y) {
+        this.spriteTeacher = new Sprite(new Texture("Game/Prof.png"));
+        this.spriteTeacher.setBounds(x,y,spriteTeacher.getWidth()/6,spriteTeacher.getHeight()/6);
+    }
+
 }

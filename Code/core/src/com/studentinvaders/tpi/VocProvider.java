@@ -37,13 +37,22 @@ public class VocProvider {
         vocs.add(voc8);
 
         words = new ArrayList<Words>();
-        Words words1 = new Words(1,1264,"blanc","white");
-        Words words2 = new Words(1,1265,"bleu","blue");
-        Words words3 = new Words(1,1266,"bleu clair","light blue");
-        words.add(words1);
-        words.add(words2);
-        words.add(words3);
-
+        Words wordsTeach1 = new Words(1,1264,"blanc", Words.wordType.Teacher);
+        Words wordsStud1 = new Words(1,1264,"white", Words.wordType.Student);
+        Words wordsTeach2 = new Words(1,1265,"bleu", Words.wordType.Teacher);
+        Words wordsStud2 = new Words(1,1265,"blue", Words.wordType.Student);
+        Words wordsTeach3 = new Words(1,1266,"bleu clair", Words.wordType.Teacher);
+        Words wordsStud3 = new Words(1,1266,"light blue", Words.wordType.Student);
+        Words wordsTeach4 = new Words(1,1267,"rouge", Words.wordType.Teacher);
+        Words wordsStud4 = new Words(1,1267,"red", Words.wordType.Student);
+        words.add(wordsTeach1);
+        words.add(wordsTeach2);
+        words.add(wordsTeach3);
+        words.add(wordsTeach4);
+        words.add(wordsStud1);
+        words.add(wordsStud2);
+        words.add(wordsStud3);
+        words.add(wordsStud4);
 
 
     }
