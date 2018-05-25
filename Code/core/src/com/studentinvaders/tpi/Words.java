@@ -21,7 +21,8 @@ import java.util.ArrayList;
  */
 
 public class Words extends Group{
-    static public enum wordType{
+
+    public enum wordType{
         Teacher,
         Student
     }
@@ -34,7 +35,7 @@ public class Words extends Group{
     String word;
     wordType type;
 
-    Words(int vocID, int idWord, String word,wordType type){
+    public Words(int vocID, int idWord, String word,wordType type){
         this.vocID = vocID;
         this.idWord = idWord;
         this.word = word;
@@ -44,6 +45,7 @@ public class Words extends Group{
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
 
+        //Switch pour différencier les mots si ils sont pour le prof ou pour l'élève.
         switch (type){
             case Teacher:
                 this.box = new Sprite(new Texture("Game/Box.png"));
