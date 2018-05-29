@@ -30,6 +30,7 @@ public class Words extends Group{
     int vocID;
     int idWord;
     Sprite box;
+    public static Sprite student;
     Label lblbox;
     BitmapFont font;
     String word;
@@ -57,9 +58,13 @@ public class Words extends Group{
                 addActor(lblbox);
                 break;
             case Student:
+                this.student = new Sprite(new Texture("Game/Eleve.png"));
+                this.student.setBounds(500,600,student.getWidth()/5,student.getHeight()/5);
                 lblbox = new Label(word,labelStyle);
                 lblbox.setFontScale(.19f);
+                lblbox.setBounds(student.getX(),student.getY(),student.getWidth(),student.getHeight());
                 lblbox.setAlignment(Align.center);
+                addActor(new Image(new SpriteDrawable(student)));
                 addActor(lblbox);
                 break;
         }

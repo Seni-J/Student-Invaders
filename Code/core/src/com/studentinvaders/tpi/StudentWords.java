@@ -11,9 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
  * @version 1.0
  */
 
-public class Student extends Actor {
+public class StudentWords extends Words {
     StudentInvaders game;
-    Sprite spritestudent;
+
     public final static int stateLeft = 0;
     public final static int stateRight = 1;
     public final static int stateDown = 2;
@@ -21,26 +21,15 @@ public class Student extends Actor {
     public int state = stateLeft;
     public boolean wasLastStateLeft = true;
 
-    public Student(){
-        this.spritestudent = new Sprite(new Texture("Game/Eleve.png"));
-        this.spritestudent.setBounds(spritestudent.getX(),spritestudent.getY(),spritestudent.getWidth()/5,spritestudent.getHeight()/5);
+    public StudentWords(int vocID, int idWord, String word,wordType type){
+        super(vocID,idWord,word,type);
     }
 
-    @Override
-    public void draw(Batch batch, float parentAlpha) {
-        spritestudent.draw(batch);
-    }
-
-    @Override
-    protected void positionChanged() {
-        super.positionChanged();
-        spritestudent.setPosition(this.getX(),this.getY());
-    }
 
     /**
      * Méthode pour déplacer un étudiant. Si un étudiant atteint le bord de l'écran (gauche ou droite), il avance en direction du prof et il se dirige à l'autre bord de l'écran.
      */
-    public void Move(){
+    public void Move(float delta){
         if (state == stateLeft) {
             this.moveBy(-2f,0);
             if (this.getX() < 10) {
@@ -50,7 +39,7 @@ public class Student extends Actor {
         }
         if (state == stateRight) {
             this.moveBy(2f,0);
-            if (this.getX() + spritestudent.getWidth() > game.viewport.getScreenWidth()) {
+            if (this.getX() + Words.student.getWidth() > game.viewport.getScreenWidth()) {
                 state = stateDown;
                 wasLastStateLeft = false;
             }

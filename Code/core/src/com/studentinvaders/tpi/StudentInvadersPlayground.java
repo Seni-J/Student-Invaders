@@ -30,14 +30,13 @@ public class StudentInvadersPlayground extends Actor implements Screen{
     int id;
 
     ArrayList<TeacherWords> teacherWords;
-    ArrayList<Words> studentWords;
+    ArrayList<StudentWords> studentWords;
     ArrayList<Actor> boxTeachers;
     ArrayList<Actor> boxStudents;
 
     Texture bg;
     Texture boxTexture;
     Teacher teacher;
-    Student student;
     int sendFlight = 0;
     int indexvisible;
     boolean changed = false;
@@ -55,7 +54,6 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         bg = new Texture("Game/bg_game.jpg");
         boxTexture = new Texture("Game/Box.png");
         teacher = new Teacher();
-        student = new Student();
         leftSide = new Rectangle();
         rightSide = new Rectangle();
         boxTeachers = new ArrayList<Actor>();
@@ -67,7 +65,7 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         shapeRenderer = new ShapeRenderer();
 
         teacherWords = VocProvider.getTeacherWords();
-        studentWords = VocProvider.getWords();
+        studentWords = VocProvider.getStudentWords();
 
 
         //Effacer les anciens acteurs (Labels).
@@ -97,10 +95,13 @@ public class StudentInvadersPlayground extends Actor implements Screen{
                 }
         }
 
-        for(Words word: studentWords){
+        int x = 500;
+        for(StudentWords word: studentWords){
             if(word.vocID == id){
                 if(word.type == Words.wordType.Student){
                     boxStudents.add(word);
+                    boxStudents.get(boxStudents.size() - 1).setPosition(x,600);
+                    x += 150;
                 }
             }
         }
@@ -111,14 +112,8 @@ public class StudentInvadersPlayground extends Actor implements Screen{
             game.stage.addActor(boxTeacher);
         }
 
-        int x = 500;
         for(Actor boxStudent: boxStudents){
-            Table table = new Table();
-            table.setFillParent(true);
-            table.setPosition(x,700);
-            table.add(student,boxStudent);
-            game.stage.addActor(table);
-            x += 50;
+            game.stage.addActor(boxStudent);
         }
 
         game.stage.addActor(teacher);
@@ -138,7 +133,11 @@ public class StudentInvadersPlayground extends Actor implements Screen{
 
         //Méthode pour bouger le prof.
         MoveTeacher();
-        student.Move();
+
+        for(StudentWords word: studentWords){
+            word.Move(Gdx.graphics.getDeltaTime());
+        }
+
         //Si un avion est envoyé, on ne fait pas de check de mot. Cette condition est surtout là pour que l'avion continue son chemin sans qu'elle s'arrête à cause du input X et Y.
         if(sendFlight == 1){
             SendFlight();
