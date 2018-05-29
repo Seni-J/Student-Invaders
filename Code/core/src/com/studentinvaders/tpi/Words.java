@@ -57,9 +57,10 @@ public class Words extends Group{
                 addActor(lblbox);
                 break;
             case Student:
-                box = new Sprite(new Texture("Game/Eleve.png"));
-                box.setSize(box.getWidth()/6,box.getHeight()/6);
                 lblbox = new Label(word,labelStyle);
+                lblbox.setFontScale(.19f);
+                lblbox.setAlignment(Align.center);
+                addActor(lblbox);
                 break;
         }
     }

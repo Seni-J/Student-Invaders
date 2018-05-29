@@ -42,7 +42,7 @@ public class SelectLanguages implements Screen {
     int ylang = 450;
     int yvoc = 450;
     int i = 1;
-    public int idVoc = 0;
+    public static int idVoc = 0;
     boolean done = false;
 
 

@@ -38,6 +38,7 @@ public class VocProvider {
         vocs.add(voc8);
 
         teacherWords = new ArrayList<TeacherWords>();
+        words = new ArrayList<Words>();
         TeacherWords wordsTeach1 = new TeacherWords(1,1264,"blanc", Words.wordType.Teacher);
         Words wordsStud1 = new Words(1,1264,"white", Words.wordType.Student);
         TeacherWords wordsTeach2 = new TeacherWords(1,1265,"bleu", Words.wordType.Teacher);
@@ -56,13 +57,12 @@ public class VocProvider {
         teacherWords.add(wordsTeach4);
         teacherWords.add(wordsTeach5);
         teacherWords.add(wordsTeach6);
-        /*
         words.add(wordsStud1);
         words.add(wordsStud2);
         words.add(wordsStud3);
         words.add(wordsStud4);
         words.add(wordsStud5);
-        words.add(wordsStud6);*/
+        words.add(wordsStud6);
 
 
     }
@@ -75,4 +75,6 @@ public class VocProvider {
     }
 
     static public ArrayList<TeacherWords> getTeacherWords(){return teacherWords;}
+
+    static public ArrayList<Words> getWords(){return words;}
 }

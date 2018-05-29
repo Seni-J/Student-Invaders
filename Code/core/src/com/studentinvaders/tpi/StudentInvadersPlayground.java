@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 
 import java.lang.reflect.Array;
@@ -26,16 +27,17 @@ import javax.swing.Box;
 
 public class StudentInvadersPlayground extends Actor implements Screen{
     final StudentInvaders game;
-    SelectLanguages id;
+    int id;
 
     ArrayList<TeacherWords> teacherWords;
+    ArrayList<Words> studentWords;
     ArrayList<Actor> boxTeachers;
     ArrayList<Actor> boxStudents;
 
     Texture bg;
     Texture boxTexture;
     Teacher teacher;
-    int length = 50;
+    Student student;
     int sendFlight = 0;
     int indexvisible;
     boolean changed = false;
@@ -53,14 +55,19 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         bg = new Texture("Game/bg_game.jpg");
         boxTexture = new Texture("Game/Box.png");
         teacher = new Teacher();
+        student = new Student();
         leftSide = new Rectangle();
         rightSide = new Rectangle();
         boxTeachers = new ArrayList<Actor>();
         boxStudents = new ArrayList<Actor>();
 
+        id = SelectLanguages.idVoc;
+
+
         shapeRenderer = new ShapeRenderer();
 
         teacherWords = VocProvider.getTeacherWords();
+        studentWords = VocProvider.getWords();
 
 
         //Effacer les anciens acteurs (Labels).
@@ -73,27 +80,45 @@ public class StudentInvadersPlayground extends Actor implements Screen{
 
         // Pour chaque mot du voc sélectionné, on crée des acteurs qu'on ajoute dans notre tableau boxTeacher pour les mots en bas.
         for (TeacherWords word: teacherWords) {
-            if(word.type == Words.wordType.Teacher){
-                word.setBounds(word.box.getX(),word.box.getY(),word.box.getWidth(),word.box.getHeight());
-                boxTeachers.add(word);
-                if(boxTeachers.get(boxTeachers.size() - 1).getX() > game.viewport.getScreenWidth()){
-                    boxTeachers.get(boxTeachers.size() - 1).setVisible(false);
-                }
-                boxTeachers.get(boxTeachers.size() - 1).setName(word.word);
-                if(boxTeachers.size() < 2){
-                    boxTeachers.get(0).setX(25);
-                }
-                if(boxTeachers.size() >= 2) {
-                    boxTeachers.get(boxTeachers.size() - 1).setPosition(boxTeachers.get(boxTeachers.size() - 2).getX() + boxTeachers.get(boxTeachers.size() - 2).getWidth() + 50,0);
-                }
-            }else if(word.type == Words.wordType.Student){
-                boxStudents.add(word);
+            if(word.vocID == id)
+                if(word.type == Words.wordType.Teacher){
+                    word.setBounds(word.box.getX(),word.box.getY(),word.box.getWidth(),word.box.getHeight());
+                    boxTeachers.add(word);
+                    if(boxTeachers.get(boxTeachers.size() - 1).getX() > game.viewport.getScreenWidth()){
+                        boxTeachers.get(boxTeachers.size() - 1).setVisible(false);
+                    }
+                    boxTeachers.get(boxTeachers.size() - 1).setName(word.word);
+                    if(boxTeachers.size() < 2){
+                        boxTeachers.get(0).setX(25);
+                    }
+                    if(boxTeachers.size() >= 2) {
+                        boxTeachers.get(boxTeachers.size() - 1).setPosition(boxTeachers.get(boxTeachers.size() - 2).getX() + boxTeachers.get(boxTeachers.size() - 2).getWidth() + 50,0);
+                    }
                 }
         }
 
+        for(Words word: studentWords){
+            if(word.vocID == id){
+                if(word.type == Words.wordType.Student){
+                    boxStudents.add(word);
+                }
+            }
+        }
+
+        Gdx.app.log("Box", studentWords.toString());
         // Ajout d'acteur dans le tableau boxTeachers.
         for(Actor boxTeacher: boxTeachers){
             game.stage.addActor(boxTeacher);
+        }
+
+        int x = 500;
+        for(Actor boxStudent: boxStudents){
+            Table table = new Table();
+            table.setFillParent(true);
+            table.setPosition(x,700);
+            table.add(student,boxStudent);
+            game.stage.addActor(table);
+            x += 50;
         }
 
         game.stage.addActor(teacher);
@@ -113,7 +138,7 @@ public class StudentInvadersPlayground extends Actor implements Screen{
 
         //Méthode pour bouger le prof.
         MoveTeacher();
-
+        student.Move();
         //Si un avion est envoyé, on ne fait pas de check de mot. Cette condition est surtout là pour que l'avion continue son chemin sans qu'elle s'arrête à cause du input X et Y.
         if(sendFlight == 1){
             SendFlight();
@@ -175,7 +200,7 @@ public class StudentInvadersPlayground extends Actor implements Screen{
             }
         }
         if(rightSide.contains(Gdx.input.getX(), game.viewport.getScreenHeight() - Gdx.input.getY())){
-            if(teacher.getX() < 1180) {
+            if(teacher.getX() + teacher.spriteTeacher.getWidth() < game.viewport.getScreenWidth()) {
                 teacher.moveBy(2.5f, 0);
                 if(game.stage.getRoot().findActor("PaperFlight") != null && sendFlight == 0) {
                     game.stage.getRoot().findActor("PaperFlight").moveBy(2.5f, 0);
