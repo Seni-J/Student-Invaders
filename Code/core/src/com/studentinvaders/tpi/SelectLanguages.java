@@ -30,7 +30,7 @@ import javax.xml.soap.Text;
  */
 
 public class SelectLanguages implements Screen {
-    final StudentInvaders game;
+    StudentInvaders game;
     Texture bg;
     Sprite prof;
     Sprite eleve;
@@ -57,7 +57,7 @@ public class SelectLanguages implements Screen {
 
     private ShapeRenderer shapeRenderer;
 
-    public SelectLanguages(final StudentInvaders game){
+    public SelectLanguages(StudentInvaders game){
         this.game = game;
         langues = VocProvider.getLanguages();
         vocabulaires = VocProvider.getVocs();
@@ -155,7 +155,7 @@ public class SelectLanguages implements Screen {
 
     @Override
     public void dispose() {
-
+        game.stage.dispose();
     }
 
     public void checkIfCollide() {

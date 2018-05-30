@@ -25,13 +25,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MainMenu implements Screen {
 
-    final StudentInvaders game;
+    StudentInvaders game;
     Viewport viewport;
     boolean keyPressed = false;
 
     Texture bg = new Texture("Menu/bg-school.jpg");
 
-    public MainMenu(final StudentInvaders game) {
+    public MainMenu(StudentInvaders game) {
         VocProvider.load();
         this.game = game;
         viewport = new ScreenViewport();

@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import sun.applet.Main;
+
 public class StudentInvaders extends Game {
 	Stage stage;
 	public SpriteBatch batch;
@@ -35,6 +37,15 @@ public class StudentInvaders extends Game {
 	}
 	public void gotoGameScreen(){
 		StudentInvadersPlayground selectScreen = new StudentInvadersPlayground(this);
+		setScreen(selectScreen);
+	}
+
+	public void gotoMainScreen(){
+		MainMenu selectScreen = new MainMenu(this);
+		setScreen(selectScreen);
+	}
+	public void gotoGameOverScreen(){
+		GameOver selectScreen = new GameOver(this);
 		setScreen(selectScreen);
 	}
 

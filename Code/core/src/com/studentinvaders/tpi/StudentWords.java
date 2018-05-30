@@ -3,6 +3,7 @@ package com.studentinvaders.tpi;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
@@ -17,9 +18,15 @@ public class StudentWords extends Words {
     public final static int stateLeft = 0;
     public final static int stateRight = 1;
     public final static int stateDown = 2;
+    public final static int stateangry = 3;
+    public final static int statepause = 4;
 
     public int state = stateLeft;
     public boolean wasLastStateLeft = true;
+
+    float linearSpeed = 150f;
+
+
 
     public StudentWords(int vocID, int idWord, String word,wordType type){
         super(vocID,idWord,word,type);
@@ -32,24 +39,42 @@ public class StudentWords extends Words {
     public void Move(float delta){
         if (state == stateLeft) {
             this.moveBy(-2f,0);
-            if (this.getX() < 10) {
+            if (this.getX() < 50) {
                 state = stateDown;
                 wasLastStateLeft = true;
             }
         }
         if (state == stateRight) {
             this.moveBy(2f,0);
-            if (this.getX() + Words.student.getWidth() > game.viewport.getScreenWidth()) {
+            if (this.getX() + Words.student.getWidth() > game.viewport.getScreenWidth() - 50) {
                 state = stateDown;
                 wasLastStateLeft = false;
             }
         }
         if (state == stateDown) {
-            this.setPosition(this.getX(),this.getY() - 50);
-            if (wasLastStateLeft)
-                state = stateRight;
-            else
-                state = stateLeft;
+            if (this.getX() > 1 && wasLastStateLeft) {
+                moveBy(-2f, -1f);
+            } else if (this.getX() + Words.student.getWidth() < game.viewport.getScreenWidth() && !wasLastStateLeft) {
+                moveBy(2f, -1f);
+            } else {
+                if (wasLastStateLeft)
+                    state = stateRight;
+                else
+                    state = stateLeft;
             }
         }
+        if(state == statepause){
+            Vector2 speed = new Vector2();
+            Vector2 deltaVector = new Vector2(0,game.viewport.getScreenHeight() - 50);
+            Vector2 studentVector = new Vector2(this.getX(), this.getY());
+            deltaVector.sub(studentVector);
+            float dt = deltaVector.len();
+
+            speed.x = linearSpeed / dt * deltaVector.x;
+            speed.y = linearSpeed / dt * deltaVector.y;
+
+            moveBy(speed.x * delta,speed.y * delta);
+        }
     }
+
+}

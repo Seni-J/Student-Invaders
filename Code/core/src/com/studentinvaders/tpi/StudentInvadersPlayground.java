@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.lang.reflect.Array;
 import java.text.ParsePosition;
@@ -25,21 +26,22 @@ import javax.swing.Box;
  * Created by Senistan.JEGARAJASIN on 15.05.2018.
  */
 
-public class StudentInvadersPlayground extends Actor implements Screen{
-    final StudentInvaders game;
+public class StudentInvadersPlayground implements Screen{
+    StudentInvaders game;
     int id;
 
     ArrayList<TeacherWords> teacherWords;
     ArrayList<StudentWords> studentWords;
-    ArrayList<Actor> boxTeachers;
-    ArrayList<Actor> boxStudents;
+    ArrayList<Words> boxTeachers;
+    ArrayList<Words> boxStudents;
 
     Texture bg;
     Texture boxTexture;
     Teacher teacher;
     int sendFlight = 0;
     int indexvisible;
-    boolean changed = false;
+    int paperflightid;
+    boolean gameOver = false;
 
     Rectangle leftSide;
     Rectangle rightSide;
@@ -49,15 +51,15 @@ public class StudentInvadersPlayground extends Actor implements Screen{
 
 
 
-    public StudentInvadersPlayground(final StudentInvaders game) {
+    public StudentInvadersPlayground(StudentInvaders game) {
         this.game = game;
         bg = new Texture("Game/bg_game.jpg");
         boxTexture = new Texture("Game/Box.png");
         teacher = new Teacher();
         leftSide = new Rectangle();
         rightSide = new Rectangle();
-        boxTeachers = new ArrayList<Actor>();
-        boxStudents = new ArrayList<Actor>();
+        boxTeachers = new ArrayList<Words>();
+        boxStudents = new ArrayList<Words>();
 
         id = SelectLanguages.idVoc;
 
@@ -106,13 +108,13 @@ public class StudentInvadersPlayground extends Actor implements Screen{
             }
         }
 
-        Gdx.app.log("Box", studentWords.toString());
+        Gdx.app.log("act", game.stage.getActors().toString(","));
         // Ajout d'acteur dans le tableau boxTeachers.
-        for(Actor boxTeacher: boxTeachers){
+        for(Words boxTeacher: boxTeachers){
             game.stage.addActor(boxTeacher);
         }
 
-        for(Actor boxStudent: boxStudents){
+        for(Words boxStudent: boxStudents){
             game.stage.addActor(boxStudent);
         }
 
@@ -130,6 +132,7 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         game.batch.begin();
         game.batch.draw(bg,0,0, game.viewport.getScreenWidth(),game.viewport.getScreenHeight());
         game.batch.end();
+
 
         //Méthode pour bouger le prof.
         MoveTeacher();
@@ -150,8 +153,8 @@ public class StudentInvadersPlayground extends Actor implements Screen{
         if(game.stage.getActors().peek().getName().toString().contains(String.valueOf("PaperFlight"))) {
             if(game.stage.getActors().peek().getY() > game.viewport.getScreenHeight()){
                 sendFlight = 0;
-                teacherWords.get(indexvisible).known = true;
-                game.stage.getActors().pop();
+                teacherWords.get(indexvisible).setVisible(true);
+                game.stage.getActors().pop(); // On supprime l'avion en papier
                 teacher.changeImageback(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
             }else {
                 if (Gdx.input.getX() > 0 && Gdx.input.getX() < game.viewport.getScreenWidth() && game.viewport.getScreenHeight() - Gdx.input.getY() > teacher.spriteTeacher.getY() + teacher.spriteTeacher.getHeight() && game.viewport.getScreenHeight() - Gdx.input.getY() < game.viewport.getScreenHeight()) {
@@ -159,6 +162,11 @@ public class StudentInvadersPlayground extends Actor implements Screen{
                 }
             }
         }
+        CheckCollision();
+
+        /*if(gameOver){
+            game.gotoGameOverScreen();
+        }*/
 
         game.stage.draw();
 
@@ -186,8 +194,10 @@ public class StudentInvadersPlayground extends Actor implements Screen{
 
     @Override
     public void dispose() {
-
+        game.stage.dispose();
     }
+
+
 
     public void MoveTeacher(){
         if(leftSide.contains(Gdx.input.getX(),game.viewport.getScreenHeight() - Gdx.input.getY())){
@@ -214,7 +224,7 @@ public class StudentInvadersPlayground extends Actor implements Screen{
 
     public void CheckWordTaken(){
         if(Gdx.input.getX() > 0 && Gdx.input.getX() < game.viewport.getScreenWidth() && game.viewport.getScreenHeight() - Gdx.input.getY() > 0 && game.viewport.getScreenHeight() - Gdx.input.getY() < 100){
-            for (Actor box: boxTeachers){
+            for (Words box: boxTeachers){
                 if(Gdx.input.getX() > box.getX() && Gdx.input.getX() < box.getX() + box.getWidth()){
                     if(teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() > box.getX()
                             && teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() < box.getX() + box.getWidth()) {
@@ -251,7 +261,7 @@ public class StudentInvadersPlayground extends Actor implements Screen{
     }
 
     public void CreatePaperFlight(int id){
-        int paperflightid = id;
+        paperflightid = id;
         Image PaperFlight = new Image(new SpriteDrawable(new Sprite(new Texture("Game/AvionEnPapier.png"))));
 
         PaperFlight.setBounds(this.teacher.spriteTeacher.getX() + this.teacher.spriteTeacher.getWidth()/2 - 20,
@@ -259,6 +269,40 @@ public class StudentInvadersPlayground extends Actor implements Screen{
 
         game.stage.addActor(PaperFlight);
         game.stage.getActors().peek().setName("PaperFlight");
+
+    }
+
+    public void CheckCollision(){
+        for (Words student: boxStudents) {
+            if (teacher.spriteTeacher.getBoundingRectangle().overlaps(new Rectangle(student.getX(),student.getY(),student.getWidth(),student.getHeight()))){
+                gameOver = true;
+            }else if(game.stage.getActors().peek().getName().toString().contains(String.valueOf("PaperFlight"))){
+                Rectangle paperFlight = new Rectangle(game.stage.getActors().peek().getX(),game.stage.getActors().peek().getY(),game.stage.getActors().peek().getWidth(),game.stage.getActors().peek().getHeight());
+
+                if(paperFlight.overlaps(new Rectangle(student.getX(),student.getY(),student.getWidth(),student.getHeight()))){
+                    if(paperflightid == student.getIdWord()){
+                        teacherWords.get(indexvisible).known = true;
+                        //recheck this line mate
+                        for(StudentWords word: studentWords){
+                            if(student.box == word.box){
+                                word.state = 4;
+                            }
+                        }
+                        teacher.changeImageback(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
+                        game.stage.getActors().pop();
+                        sendFlight = 0;
+                    }else {
+                        student.moveBy(0,-3f);
+                        game.stage.getActors().pop();
+                        teacherWords.get(indexvisible).setVisible(true);
+                        teacher.changeImageback(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
+                        sendFlight = 0;
+                    }
+                }
+            }
+        }
+    }
+    public void removeStudent(){
 
     }
 }

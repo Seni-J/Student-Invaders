@@ -59,11 +59,11 @@ public class Words extends Group{
                 break;
             case Student:
                 this.student = new Sprite(new Texture("Game/Eleve.png"));
-                this.student.setBounds(500,600,student.getWidth()/5,student.getHeight()/5);
+                this.student.setBounds(this.student.getX(),this.student.getY(),this.student.getWidth()/5,this.student.getHeight()/5);
                 lblbox = new Label(word,labelStyle);
                 lblbox.setFontScale(.19f);
-                lblbox.setBounds(student.getX(),student.getY(),student.getWidth(),student.getHeight());
-                lblbox.setAlignment(Align.center);
+                lblbox.setBounds(this.student.getX(),this.student.getY(),this.student.getWidth(),this.student.getHeight());
+                lblbox.setAlignment(Align.bottom);
                 addActor(new Image(new SpriteDrawable(student)));
                 addActor(lblbox);
                 break;
@@ -74,5 +74,9 @@ public class Words extends Group{
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+    }
+
+    public int getIdWord() {
+        return idWord;
     }
 }
