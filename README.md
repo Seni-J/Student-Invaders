@@ -1,5 +1,5 @@
 <p align="center">
-  <b>Student-Invaders</b>
+  <h1><b>Student-Invaders</b></h1>
 </p>
 
 Jeu didactique d'apprentissage de vocabulaire sur Android.
