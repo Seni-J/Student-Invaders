@@ -2,7 +2,7 @@
 
 Jeu didactique d'apprentissage de vocabulaire sur Android
 
-![GitHub Logo](/images/logo.png)
+![Jeu](/Documentation/Autres/Page%20de%20garde.PNG)
 
 ## Introduction
 
