@@ -98,23 +98,25 @@ public class StudentInvadersPlayground implements Screen{
         }
 
         int x = 500;
+        int y = game.viewport.getScreenHeight() - 200;
         for(StudentWords word: studentWords){
             if(word.vocID == id){
                 if(word.type == Words.wordType.Student){
                     boxStudents.add(word);
-                    boxStudents.get(boxStudents.size() - 1).setPosition(x,600);
+                    boxStudents.get(boxStudents.size() - 1).setPosition(x,y);
                     x += 150;
                 }
             }
         }
 
-        Gdx.app.log("act", game.stage.getActors().toString(","));
         // Ajout d'acteur dans le tableau boxTeachers.
         for(Words boxTeacher: boxTeachers){
             game.stage.addActor(boxTeacher);
         }
 
         for(Words boxStudent: boxStudents){
+            boxStudent.setHeight(new Texture("Game/Eleve.png").getHeight() /5);
+            boxStudent.setWidth(new Texture("Game/Eleve.png").getWidth() / 5);
             game.stage.addActor(boxStudent);
         }
 
@@ -163,10 +165,11 @@ public class StudentInvadersPlayground implements Screen{
             }
         }
         CheckCollision();
+        RemoveStudent();
 
-        /*if(gameOver){
+        if(gameOver){
             game.gotoGameOverScreen();
-        }*/
+        }
 
         game.stage.draw();
 
@@ -202,17 +205,17 @@ public class StudentInvadersPlayground implements Screen{
     public void MoveTeacher(){
         if(leftSide.contains(Gdx.input.getX(),game.viewport.getScreenHeight() - Gdx.input.getY())){
             if(teacher.getX() > 0) {
-                teacher.moveBy(-2.5f, 0);
+                teacher.moveBy(-3.5f, 0);
                 if(game.stage.getRoot().findActor("PaperFlight") != null && sendFlight == 0){
-                    game.stage.getRoot().findActor("PaperFlight").moveBy(-2.5f,0);
+                    game.stage.getRoot().findActor("PaperFlight").moveBy(-3.5f,0);
                 }
             }
         }
         if(rightSide.contains(Gdx.input.getX(), game.viewport.getScreenHeight() - Gdx.input.getY())){
             if(teacher.getX() + teacher.spriteTeacher.getWidth() < game.viewport.getScreenWidth()) {
-                teacher.moveBy(2.5f, 0);
+                teacher.moveBy(3.5f, 0);
                 if(game.stage.getRoot().findActor("PaperFlight") != null && sendFlight == 0) {
-                    game.stage.getRoot().findActor("PaperFlight").moveBy(2.5f, 0);
+                    game.stage.getRoot().findActor("PaperFlight").moveBy(3.5f, 0);
                 }
             }
         }
@@ -282,9 +285,8 @@ public class StudentInvadersPlayground implements Screen{
                 if(paperFlight.overlaps(new Rectangle(student.getX(),student.getY(),student.getWidth(),student.getHeight()))){
                     if(paperflightid == student.getIdWord()){
                         teacherWords.get(indexvisible).known = true;
-                        //recheck this line mate
                         for(StudentWords word: studentWords){
-                            if(student.box == word.box){
+                            if(word.idWord == paperflightid){
                                 word.state = 4;
                             }
                         }
@@ -292,7 +294,7 @@ public class StudentInvadersPlayground implements Screen{
                         game.stage.getActors().pop();
                         sendFlight = 0;
                     }else {
-                        student.moveBy(0,-3f);
+                        student.angry = true;
                         game.stage.getActors().pop();
                         teacherWords.get(indexvisible).setVisible(true);
                         teacher.changeImageback(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
@@ -301,8 +303,19 @@ public class StudentInvadersPlayground implements Screen{
                 }
             }
         }
-    }
-    public void removeStudent(){
 
+        for(StudentWords word: studentWords){
+            if(word.angry){
+                word.state = 3;
+            }
+        }
+    }
+
+    public void RemoveStudent(){
+        for (Words student: boxStudents){
+            if(student.getX() < 10 && student.getY() > game.viewport.getScreenHeight()){
+                student.remove();
+            }
+        }
     }
 }

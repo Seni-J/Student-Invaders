@@ -35,6 +35,7 @@ public class Words extends Group{
     BitmapFont font;
     String word;
     wordType type;
+    boolean angry = false;
 
     public Words(int vocID, int idWord, String word,wordType type){
         this.vocID = vocID;
@@ -78,5 +79,15 @@ public class Words extends Group{
 
     public int getIdWord() {
         return idWord;
+    }
+
+    @Override
+    public float getHeight() {
+        return super.getHeight();
+    }
+
+    @Override
+    public float getWidth() {
+        return super.getWidth();
     }
 }

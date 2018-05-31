@@ -36,17 +36,17 @@ public class StudentInvaders extends Game {
 		setScreen(selectScreen);
 	}
 	public void gotoGameScreen(){
-		StudentInvadersPlayground selectScreen = new StudentInvadersPlayground(this);
-		setScreen(selectScreen);
+		StudentInvadersPlayground gameScreen = new StudentInvadersPlayground(this);
+		setScreen(gameScreen);
 	}
 
 	public void gotoMainScreen(){
-		MainMenu selectScreen = new MainMenu(this);
-		setScreen(selectScreen);
+		MainMenu mainMenuScreen = new MainMenu(this);
+		setScreen(mainMenuScreen);
 	}
 	public void gotoGameOverScreen(){
-		GameOver selectScreen = new GameOver(this);
-		setScreen(selectScreen);
+		GameOver gameOverScreen = new GameOver(this);
+		setScreen(gameOverScreen);
 	}
 
 

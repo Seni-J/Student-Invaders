@@ -59,6 +59,7 @@ public class SelectLanguages implements Screen {
 
     public SelectLanguages(StudentInvaders game){
         this.game = game;
+        idVoc = 0;
         langues = VocProvider.getLanguages();
         vocabulaires = VocProvider.getVocs();
         grpVoc = new Group();
@@ -263,6 +264,7 @@ public class SelectLanguages implements Screen {
                     @Override
                     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                         if(game.stage.getActors().peek().getColor().equals(Color.RED))
+                        game.gotoGameScreen();
                         game.gotoGameScreen();
                         return super.touchDown(event, x, y, pointer, button);
                     }

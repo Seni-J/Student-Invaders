@@ -18,19 +18,20 @@ public class GameOver implements Screen {
 
     public GameOver(StudentInvaders game) {
         this.game = game;
-        game.stage.getRoot().clearChildren();
         bg = new Texture("GameOver.jpg");
-
+        game.stage.getRoot().clearChildren();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.font;
 
         Label gameOver = new Label("GAME OVER",labelStyle);
-        gameOver.setScale(2f);
-        gameOver.setPosition(game.viewport.getScreenWidth()/2,game.viewport.getScreenHeight()/2);
+        //gameOver.setScale(2f);
+        gameOver.setPosition(game.viewport.getScreenWidth()/4,game.viewport.getScreenHeight()/2);
 
         Label rejouer = new Label("Retour au menu",labelStyle);
-        rejouer.setPosition(game.viewport.getScreenWidth()/2,game.viewport.getScreenHeight()/2 - 200);
+        rejouer.setPosition(game.viewport.getScreenWidth()/4,game.viewport.getScreenHeight()/2 - 200);
+
+        Gdx.app.log("size", Integer.toString(game.viewport.getScreenWidth()) + ";" + Integer.toString(game.viewport.getScreenHeight()));
 
         rejouer.addListener(new InputListener(){
             @Override
@@ -56,10 +57,9 @@ public class GameOver implements Screen {
         game.batch.draw(bg,0,0,game.viewport.getScreenWidth(),game.viewport.getScreenHeight());
         game.batch.end();
 
-        Gdx.app.log("Actors", game.stage.getActors().toString(","));
         if(keyPressed){
+            game.stage.clear();
             game.gotoMainScreen();
-            dispose();
         }
 
         game.stage.draw();

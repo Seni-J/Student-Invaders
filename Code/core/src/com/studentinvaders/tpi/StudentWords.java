@@ -1,5 +1,6 @@
 package com.studentinvaders.tpi;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -25,6 +26,7 @@ public class StudentWords extends Words {
     public boolean wasLastStateLeft = true;
 
     float linearSpeed = 150f;
+    float timer = 2f;
 
 
 
@@ -36,16 +38,16 @@ public class StudentWords extends Words {
     /**
      * Méthode pour déplacer un étudiant. Si un étudiant atteint le bord de l'écran (gauche ou droite), il avance en direction du prof et il se dirige à l'autre bord de l'écran.
      */
-    public void Move(float delta){
+    public void Move(float delta) {
         if (state == stateLeft) {
-            this.moveBy(-2f,0);
+            this.moveBy(-2f, 0);
             if (this.getX() < 50) {
                 state = stateDown;
                 wasLastStateLeft = true;
             }
         }
         if (state == stateRight) {
-            this.moveBy(2f,0);
+            this.moveBy(2f, 0);
             if (this.getX() + Words.student.getWidth() > game.viewport.getScreenWidth() - 50) {
                 state = stateDown;
                 wasLastStateLeft = false;
@@ -63,9 +65,9 @@ public class StudentWords extends Words {
                     state = stateLeft;
             }
         }
-        if(state == statepause){
+        if (state == statepause) {
             Vector2 speed = new Vector2();
-            Vector2 deltaVector = new Vector2(0,game.viewport.getScreenHeight() - 50);
+            Vector2 deltaVector = new Vector2(0, game.viewport.getScreenHeight());
             Vector2 studentVector = new Vector2(this.getX(), this.getY());
             deltaVector.sub(studentVector);
             float dt = deltaVector.len();
@@ -73,8 +75,25 @@ public class StudentWords extends Words {
             speed.x = linearSpeed / dt * deltaVector.x;
             speed.y = linearSpeed / dt * deltaVector.y;
 
-            moveBy(speed.x * delta,speed.y * delta);
+            moveBy(speed.x * delta, speed.y * delta);
+        }
+
+        if (state == stateangry) {
+           if(timer > 0) {
+                moveBy(0, -1f);
+                timer -= delta;
+            }else {
+               if (wasLastStateLeft) {
+                   angry = false;
+                   timer = 2f;
+                   state = stateRight;
+               } else {
+                   angry = false;
+                   timer = 2f;
+                   state = stateLeft;
+               }
+           }
         }
     }
-
 }
+
