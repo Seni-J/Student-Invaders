@@ -1,6 +1,4 @@
-<p align="center">
-  <h1><b>Student-Invaders</b></h1>
-</p>
+# Student Invaders
 
 Jeu didactique d'apprentissage de vocabulaire sur Android.
 
@@ -10,6 +8,7 @@ Jeu didactique d'apprentissage de vocabulaire sur Android.
 
 Le projet est de réaliser un jeu sous Android. Il ressemble au jeu d'arcade très populaire Space Invaders. Avec cette application, il est possible d'exercer différents vocabulaires disponibles avec les langues proposées. Dans ce jeu, les élèves souhaitent connaître la traduction de leur mot voulu. Ils avancent latéralement de la même manière que les aliens dans Space Invaders d'où la ressemblance. Le professeur, contrôlé par l'utilisateur, doit envoyer la traduction au moyen d'un avion en papier à l'élève concerné. Si un élève reçoit une mauvaise traduction, il avance subitement. Dès que l'élève a reçu 3 traductions correctes, il peut partir en pause en prenant la porte.
 
+
 ### Pré-requis
 
 * Un smartphone / tablette sous Android
@@ -17,6 +16,7 @@ Le projet est de réaliser un jeu sous Android. Il ressemble au jeu d'arcade tr�
 * Un câble de transfert PC/smartphone
 
 **L'application est optimisée pour une tablette mais l'utilisation d'un smartphone est aussi possible !**
+
 
 ### Installation de l'application
 
@@ -49,6 +49,7 @@ Le projet est de réaliser un jeu sous Android. Il ressemble au jeu d'arcade tr�
 * [LibGDX](https://libgdx.badlogicgames.com) - Framework pour le développement de jeu
 * [Android Studio 3.0](https://developer.android.com/studio/) - Codage et build d'application Android
 * [Inkscape](https://inkscape.org/fr/) - Création des sprites
+
 
 ## Auteur
 
