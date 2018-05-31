@@ -1,6 +1,8 @@
+<p align="center">
 # Student-Invaders
+</p>
 
-Jeu didactique d'apprentissage de vocabulaire sur Android
+Jeu didactique d'apprentissage de vocabulaire sur Android.
 
 ![Jeu](/Documentation/Autres/Page%20de%20garde.PNG)
 
