@@ -45,6 +45,8 @@ public class StudentInvadersPlayground implements Screen{
 
     Rectangle leftSide;
     Rectangle rightSide;
+    Rectangle paperFlight;
+    Rectangle studentrect;
 
 
     private ShapeRenderer shapeRenderer;
@@ -58,6 +60,8 @@ public class StudentInvadersPlayground implements Screen{
         teacher = new Teacher();
         leftSide = new Rectangle();
         rightSide = new Rectangle();
+        paperFlight = new Rectangle();
+        studentrect = new Rectangle();
         boxTeachers = new ArrayList<Words>();
         boxStudents = new ArrayList<Words>();
 
@@ -222,7 +226,7 @@ public class StudentInvadersPlayground implements Screen{
     }
 
     public void SendFlight(){
-        game.stage.getRoot().findActor("PaperFlight").moveBy(0,3f);
+        game.stage.getRoot().findActor("PaperFlight").moveBy(0,4f);
     }
 
     public void CheckWordTaken(){
@@ -277,12 +281,13 @@ public class StudentInvadersPlayground implements Screen{
 
     public void CheckCollision(){
         for (Words student: boxStudents) {
-            if (teacher.spriteTeacher.getBoundingRectangle().overlaps(new Rectangle(student.getX(),student.getY(),student.getWidth(),student.getHeight()))){
+            studentrect.set(student.getX(),student.getY(),student.getWidth(),student.getHeight());
+            if (teacher.spriteTeacher.getBoundingRectangle().overlaps(studentrect)){
                 gameOver = true;
             }else if(game.stage.getActors().peek().getName().toString().contains(String.valueOf("PaperFlight"))){
-                Rectangle paperFlight = new Rectangle(game.stage.getActors().peek().getX(),game.stage.getActors().peek().getY(),game.stage.getActors().peek().getWidth(),game.stage.getActors().peek().getHeight());
+                paperFlight.set(game.stage.getActors().peek().getX(),game.stage.getActors().peek().getY(),game.stage.getActors().peek().getWidth(),game.stage.getActors().peek().getHeight());
 
-                if(paperFlight.overlaps(new Rectangle(student.getX(),student.getY(),student.getWidth(),student.getHeight()))){
+                if(paperFlight.overlaps(studentrect)){
                     if(paperflightid == student.getIdWord()){
                         teacherWords.get(indexvisible).known = true;
                         for(StudentWords word: studentWords){

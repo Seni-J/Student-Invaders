@@ -25,10 +25,10 @@ public class GameOver implements Screen {
         labelStyle.font = game.gameoverfont;
 
         Label gameOver = new Label("GAME OVER",labelStyle);
-        gameOver.setPosition(game.viewport.getScreenWidth()/5 + 100,game.viewport.getScreenHeight()/2);
+        gameOver.setPosition(game.viewport.getScreenWidth()/2 - 200,game.viewport.getScreenHeight()/2);
 
         Label rejouer = new Label("Retour au menu",labelStyle);
-        rejouer.setPosition(game.viewport.getScreenWidth()/5 + 100,game.viewport.getScreenHeight()/2 - 200);
+        rejouer.setPosition(game.viewport.getScreenWidth()/2 - 200,game.viewport.getScreenHeight()/2 - 200);
 
         rejouer.addListener(new InputListener(){
             @Override
