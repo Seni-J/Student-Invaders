@@ -11,7 +11,7 @@ Le projet est de réaliser un jeu sous Android. Il ressemble au jeu d'arcade tr�
 
 ### Pré-requis
 
-* Un smartphone / tablette sous Android
+* Un smartphone / tablette sous Android **4.2.2** ou supérieur
 * Un ordinateur
 * Un câble de transfert PC/smartphone
 
