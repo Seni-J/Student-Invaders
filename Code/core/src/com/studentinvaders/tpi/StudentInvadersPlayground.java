@@ -38,6 +38,11 @@ public class StudentInvadersPlayground implements Screen{
     Texture bg;
     Texture boxTexture;
     Teacher teacher;
+
+    Sprite teacherFront = new Sprite(new Texture("Game/Prof.png"));
+    Sprite teacherBack = new Sprite(new Texture("Game/ProfRetourne.png"));
+    Image PaperFlight;
+
     int sendFlight = 0;
     int indexvisible;
     int paperflightid;
@@ -230,18 +235,23 @@ public class StudentInvadersPlayground implements Screen{
     }
 
     public void CheckWordTaken(){
-        if(Gdx.input.getX() > 0 && Gdx.input.getX() < game.viewport.getScreenWidth() && game.viewport.getScreenHeight() - Gdx.input.getY() > 0 && game.viewport.getScreenHeight() - Gdx.input.getY() < 100){
-            for (Words box: boxTeachers){
-                if(Gdx.input.getX() > box.getX() && Gdx.input.getX() < box.getX() + box.getWidth()){
-                    if(teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() > box.getX()
-                            && teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() < box.getX() + box.getWidth()) {
-                        teacher.changeImage(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
-                        for(TeacherWords word: teacherWords){
-                            if(!game.stage.getActors().peek().getName().contains(String.valueOf("PaperFlight"))) {
-                                if (box.toString().contains(String.valueOf(word.lblbox))) {
-                                    CreatePaperFlight(word.idWord);
-                                    box.setVisible(false);
-                                    indexvisible = box.getZIndex();
+        if (Gdx.input.getX() > 0 && Gdx.input.getX() < game.viewport.getScreenWidth() && game.viewport.getScreenHeight() - Gdx.input.getY() > 0 && game.viewport.getScreenHeight() - Gdx.input.getY() < 100) {
+            // Cette condition est nécessaire pour éviter une fuite de mémoire.
+            if(!game.stage.getActors().peek().getName().contains(String.valueOf("PaperFlight"))) {
+                for (Words box : boxTeachers) {
+                    if (Gdx.input.getX() > box.getX() && Gdx.input.getX() < box.getX() + box.getWidth()) {
+                        if (teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() > box.getX()
+                                && teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() < box.getX() + box.getWidth()) {
+                            if (teacher.spriteTeacher != teacherBack) {
+                                teacher.changeImage(teacher.spriteTeacher.getX(), teacher.spriteTeacher.getY());
+                            }
+                            for (TeacherWords word : teacherWords) {
+                                if (!game.stage.getActors().peek().getName().contains(String.valueOf("PaperFlight"))) {
+                                    if (box.toString().contains(String.valueOf(word.lblbox))) {
+                                        CreatePaperFlight(word.idWord);
+                                        box.setVisible(false);
+                                        indexvisible = box.getZIndex();
+                                    }
                                 }
                             }
                         }
@@ -269,7 +279,7 @@ public class StudentInvadersPlayground implements Screen{
 
     public void CreatePaperFlight(int id){
         paperflightid = id;
-        Image PaperFlight = new Image(new SpriteDrawable(new Sprite(new Texture("Game/AvionEnPapier.png"))));
+        PaperFlight = new Image(new SpriteDrawable(new Sprite(new Texture("Game/AvionEnPapier.png"))));
 
         PaperFlight.setBounds(this.teacher.spriteTeacher.getX() + this.teacher.spriteTeacher.getWidth()/2 - 20,
                 this.teacher.spriteTeacher.getY() + this.teacher.spriteTeacher.getHeight()+10, PaperFlight.getWidth()/6,PaperFlight.getHeight()/6);
@@ -295,18 +305,23 @@ public class StudentInvadersPlayground implements Screen{
                                 word.state = 4;
                             }
                         }
-                        teacher.changeImageback(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
+                        if(teacher.spriteTeacher != teacherFront) {
+                            teacher.changeImageback(teacher.spriteTeacher.getX(), teacher.spriteTeacher.getY());
+                        }
                         game.stage.getActors().pop();
                         sendFlight = 0;
                     }else {
                         student.angry = true;
                         game.stage.getActors().pop();
                         teacherWords.get(indexvisible).setVisible(true);
-                        teacher.changeImageback(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
+                        if(teacher.spriteTeacher != teacherFront) {
+                            teacher.changeImageback(teacher.spriteTeacher.getX(), teacher.spriteTeacher.getY());
+                        }
                         sendFlight = 0;
                     }
                 }
             }
+
         }
 
         for(StudentWords word: studentWords){
