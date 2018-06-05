@@ -16,6 +16,7 @@ public class Teacher extends Actor{
     Sprite spriteTeacher;
 
 
+
     public Teacher(){
         this.spriteTeacher = new Sprite(new Texture("Game/Prof.png"));
         this.spriteTeacher.setBounds(0,0,spriteTeacher.getWidth()/6,spriteTeacher.getHeight()/6);

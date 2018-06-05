@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 /**
  * Created by Senistan.JEGARAJASIN on 30.05.2018.
+ * Scène d'affichage du Game Over. Permet de retourner au menu suite à défaite.
+ * @author Seni-J
+ * @version 1.0
  */
 
 public class GameOver implements Screen {
@@ -22,16 +25,13 @@ public class GameOver implements Screen {
         game.stage.getRoot().clearChildren();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
-        labelStyle.font = game.font;
+        labelStyle.font = game.gameoverfont;
 
         Label gameOver = new Label("GAME OVER",labelStyle);
-        //gameOver.setScale(2f);
-        gameOver.setPosition(game.viewport.getScreenWidth()/4,game.viewport.getScreenHeight()/2);
+        gameOver.setPosition(game.viewport.getScreenWidth()/2 - 200,game.viewport.getScreenHeight()/2);
 
         Label rejouer = new Label("Retour au menu",labelStyle);
-        rejouer.setPosition(game.viewport.getScreenWidth()/4,game.viewport.getScreenHeight()/2 - 200);
-
-        Gdx.app.log("size", Integer.toString(game.viewport.getScreenWidth()) + ";" + Integer.toString(game.viewport.getScreenHeight()));
+        rejouer.setPosition(game.viewport.getScreenWidth()/2 - 200,game.viewport.getScreenHeight()/2 - 200);
 
         rejouer.addListener(new InputListener(){
             @Override
@@ -43,7 +43,6 @@ public class GameOver implements Screen {
 
         game.stage.addActor(gameOver);
         game.stage.addActor(rejouer);
-        Gdx.app.log("Actors", game.stage.getActors().toString(","));
     }
 
     @Override

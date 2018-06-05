@@ -13,10 +13,17 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import sun.applet.Main;
 
+
+/**
+ * Classe permettant de changer de scène. Contient aussi la police d'écriture.
+ * @author Seni-J
+ * @version 1.0
+ */
 public class StudentInvaders extends Game {
 	Stage stage;
 	public SpriteBatch batch;
 	public BitmapFont font;
+	public BitmapFont gameoverfont;
 
 	static public ScreenViewport viewport;
 	
@@ -24,6 +31,7 @@ public class StudentInvaders extends Game {
 	public void create () {
 		batch = new SpriteBatch();
 		font = new BitmapFont(Gdx.files.internal("Font/KGWTW.fnt"));
+		gameoverfont = new BitmapFont(Gdx.files.internal("Font/Chalk.fnt"));
 
 		viewport = new ScreenViewport();
 		stage = new Stage(viewport);
