@@ -13,6 +13,12 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import sun.applet.Main;
 
+
+/**
+ * Classe permettant de changer de scène. Contient aussi la police d'écriture.
+ * @author Seni-J
+ * @version 1.0
+ */
 public class StudentInvaders extends Game {
 	Stage stage;
 	public SpriteBatch batch;

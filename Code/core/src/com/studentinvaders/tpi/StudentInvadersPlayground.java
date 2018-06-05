@@ -27,6 +27,9 @@ import javax.swing.Box;
 
 /**
  * Created by Senistan.JEGARAJASIN on 15.05.2018.
+ * Scène pour la place de jeu. C'est ici que la partie ce déroule avec les envois des avions en papier sur les élèves.
+ * @author Seni-J
+ * @version 1.0
  */
 
 public class StudentInvadersPlayground implements Screen{
@@ -248,7 +251,9 @@ public class StudentInvadersPlayground implements Screen{
     }
 
 
-
+    /**
+     * Méthode de déplacement du prof. On regarde si le rectangle invisible gauche ou droite est appuyée.
+     */
     public void MoveTeacher(){
         if(leftSide.contains(Gdx.input.getX(),game.viewport.getScreenHeight() - Gdx.input.getY())){
             if(teacher.getX() > 0) {
@@ -268,10 +273,16 @@ public class StudentInvadersPlayground implements Screen{
         }
     }
 
+    /**
+     * Méthode d'envoi de l'avion en papier. En retrouve l'acteur PaperFlight pour le faire bouger.
+     */
     public void SendFlight(){
         game.stage.getRoot().findActor("PaperFlight").moveBy(0,4f);
     }
 
+    /**
+     * Méthode de vérification si un mot des mots disponibles pour le professeur a été pris.
+     */
     public void CheckWordTaken(){
         if (Gdx.input.getX() > 0 && Gdx.input.getX() < game.viewport.getScreenWidth() && game.viewport.getScreenHeight() - Gdx.input.getY() > 0 && game.viewport.getScreenHeight() - Gdx.input.getY() < 100) {
             // Cette condition est nécessaire pour éviter une fuite de mémoire.
@@ -299,6 +310,9 @@ public class StudentInvadersPlayground implements Screen{
         }
     }
 
+    /**
+     * Méthode qui met à jour les positions des box pour les mots du prof en vérifiant si le mot a été pris ou non.
+     */
     public void UpdatePositionTeacherBox(){
         float x = 25;
 
@@ -319,6 +333,10 @@ public class StudentInvadersPlayground implements Screen{
         }
     }
 
+    /**
+     * Méthode pour créer l'avion en papier.
+     * @param id = l'id du mot. On l'utilise pour vérifier si l'id du mot de l'élève correspond à l'avion en papier.
+     */
     public void CreatePaperFlight(int id){
         paperflightid = id;
         PaperFlight = new Image(new SpriteDrawable(new Sprite(new Texture("Game/AvionEnPapier.png"))));
@@ -331,6 +349,9 @@ public class StudentInvadersPlayground implements Screen{
 
     }
 
+    /**
+     * Méthode de vérification de collision entre l'avion en papier et l'élève ou le prof et l'élève.
+     */
     public void CheckCollision(){
         for (Words student: boxStudents) {
             studentrect.set(student.getX(),student.getY(),student.getWidth(),student.getHeight());
@@ -339,6 +360,7 @@ public class StudentInvadersPlayground implements Screen{
             }else if(game.stage.getActors().peek().getName().toString().contains(String.valueOf("PaperFlight"))){
                 paperFlight.set(game.stage.getActors().peek().getX(),game.stage.getActors().peek().getY(),game.stage.getActors().peek().getWidth(),game.stage.getActors().peek().getHeight());
 
+                // Si l'avion en papier est en collision avec un élève.
                 if(paperFlight.overlaps(studentrect)){
                     if(paperflightid == student.getIdWord()){
                         teacherWords.get(indexvisible).known = true;
@@ -373,6 +395,9 @@ public class StudentInvadersPlayground implements Screen{
         }
     }
 
+    /***
+     * Méthode qui supprime un élève qui est en dehors de l'écran.
+     */
     public void RemoveStudent(){
         for (Words student: boxStudents){
             if(student.getX() < 10 && student.getY() > game.viewport.getScreenHeight()){

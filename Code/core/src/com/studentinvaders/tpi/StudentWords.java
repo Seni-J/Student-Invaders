@@ -29,7 +29,14 @@ public class StudentWords extends Words {
     float timer = 2f;
 
 
-
+    /**
+     * Constructeur pour chaque mot d'élève.
+     *
+     * @param vocID = id du vocabulaire
+     * @param idWord = id du mot
+     * @param word = Mot de l'élève
+     * @param type = Le type pour le mot (Prof ou élève). Un seul type possible dans ce cas, l'élève.
+     */
     public StudentWords(int vocID, int idWord, String word,wordType type){
         super(vocID,idWord,word,type);
     }

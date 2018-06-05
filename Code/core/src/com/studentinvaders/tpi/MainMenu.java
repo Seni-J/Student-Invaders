@@ -21,6 +21,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
  * Created by Senistan.JEGARAJASIN on 15.05.2018.
+ * Scène du menu principal. Affichage du bouton Jouer et Quitter.
+ * @author Seni-J
+ * @version 1.0
  */
 
 public class MainMenu implements Screen {

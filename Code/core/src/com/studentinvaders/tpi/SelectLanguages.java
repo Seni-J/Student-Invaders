@@ -27,6 +27,9 @@ import javax.xml.soap.Text;
 
 /**
  * Created by Senistan.JEGARAJASIN on 15.05.2018.
+ * Scène pour la sélection des langues.
+ * @author Seni-J
+ * @version 1.0
  */
 
 public class SelectLanguages implements Screen {
@@ -55,7 +58,6 @@ public class SelectLanguages implements Screen {
     Rectangle profRect;
     Rectangle eleveRect;
 
-    private ShapeRenderer shapeRenderer;
 
     public SelectLanguages(StudentInvaders game){
         this.game = game;
@@ -73,8 +75,6 @@ public class SelectLanguages implements Screen {
 
         profRect = new Rectangle(prof.getX(),prof.getY(),prof.getWidth(),prof.getHeight());
         eleveRect = new Rectangle(eleve.getX(),eleve.getY(),eleve.getWidth(),eleve.getHeight());
-
-        shapeRenderer = new ShapeRenderer();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.font;
@@ -119,19 +119,7 @@ public class SelectLanguages implements Screen {
 
         checkIfCollide();
 
-/*
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(profRect.x,profRect.y,profRect.width,profRect.height);
-        shapeRenderer.rect(game.stage.getActors().get(3).getX(),game.stage.getActors().get(3).getY(),game.stage.getActors().get(3).getWidth(),game.stage.getActors().get(3).getHeight());
-        shapeRenderer.rect(game.stage.getActors().get(4).getX(),game.stage.getActors().get(4).getY(),game.stage.getActors().get(4).getWidth(),game.stage.getActors().get(4).getHeight());
-        shapeRenderer.end();
-*/
-
         game.stage.draw();
-
-
-
     }
 
     @Override
@@ -159,6 +147,11 @@ public class SelectLanguages implements Screen {
         game.stage.dispose();
     }
 
+    /**
+     * Méthode pour vérifier les collisions ainsi que l'affichage du choix des vocabulaires. Chaque langue est un rectangle. De même pour le prof et l'élève.
+     * Dans cette méthode, on vérifie si une langue pour le prof et pour l'élève a été sélectionné. Après, on affiche les vocabulaires disponibles.
+     * Si un voc a été sélectionné, on peut lancer la partie.
+     */
     public void checkIfCollide() {
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.font;

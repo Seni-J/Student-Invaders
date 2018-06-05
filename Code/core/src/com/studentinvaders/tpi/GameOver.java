@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 /**
  * Created by Senistan.JEGARAJASIN on 30.05.2018.
+ * Scène d'affichage du Game Over. Permet de retourner au menu suite à défaite.
+ * @author Seni-J
+ * @version 1.0
  */
 
 public class GameOver implements Screen {
