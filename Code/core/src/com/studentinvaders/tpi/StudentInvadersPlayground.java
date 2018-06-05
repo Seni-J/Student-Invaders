@@ -9,9 +9,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.sun.org.apache.xpath.internal.operations.Bool;
@@ -42,11 +45,13 @@ public class StudentInvadersPlayground implements Screen{
     Sprite teacherFront = new Sprite(new Texture("Game/Prof.png"));
     Sprite teacherBack = new Sprite(new Texture("Game/ProfRetourne.png"));
     Image PaperFlight;
+    final Label lblPause;
 
     int sendFlight = 0;
     int indexvisible;
     int paperflightid;
     boolean gameOver = false;
+    boolean paused = false;
 
     Rectangle leftSide;
     Rectangle rightSide;
@@ -78,9 +83,25 @@ public class StudentInvadersPlayground implements Screen{
         teacherWords = VocProvider.getTeacherWords();
         studentWords = VocProvider.getStudentWords();
 
+        Label.LabelStyle labelStyle = new Label.LabelStyle();
+        labelStyle.font = game.font;
 
         //Effacer les anciens acteurs (Labels).
         game.stage.getRoot().clearChildren();
+
+        lblPause = new Label("Pause",labelStyle);
+        lblPause.setFontScale(.3f);
+        lblPause.setPosition(game.viewport.getScreenWidth() - 200,game.viewport.getScreenHeight() - 50);
+        lblPause.setSize(lblPause.getMinWidth(),lblPause.getMinHeight());
+
+        lblPause.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                paused = true;
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        game.stage.addActor(lblPause);
 
         //Mis en place des "boutons" invisibles pour déplacer le prof de gauche à droite.
         teacher.setPosition(500,100);
@@ -106,6 +127,7 @@ public class StudentInvadersPlayground implements Screen{
                 }
         }
 
+        //Ajout des élèves avec leurs positions
         int x = 500;
         int y = game.viewport.getScreenHeight() - 200;
         for(StudentWords word: studentWords){
@@ -144,40 +166,56 @@ public class StudentInvadersPlayground implements Screen{
         game.batch.draw(bg,0,0, game.viewport.getScreenWidth(),game.viewport.getScreenHeight());
         game.batch.end();
 
+        if(paused){
+            lblPause.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    paused = false;
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+            });
+        }else {
+            lblPause.addListener(new InputListener() {
+                @Override
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    paused = true;
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+            });
+            //Méthode pour bouger le prof.
+            MoveTeacher();
 
-        //Méthode pour bouger le prof.
-        MoveTeacher();
+            for (StudentWords word : studentWords) {
+                word.Move(Gdx.graphics.getDeltaTime());
+            }
 
-        for(StudentWords word: studentWords){
-            word.Move(Gdx.graphics.getDeltaTime());
-        }
+            //Si un avion est envoyé, on ne fait pas de check de mot. Cette condition est surtout là pour que l'avion continue son chemin sans qu'elle s'arrête à cause du input X et Y.
+            if (sendFlight == 1) {
+                SendFlight();
+            } else {
+                CheckWordTaken();
+                UpdatePositionTeacherBox();
+            }
 
-        //Si un avion est envoyé, on ne fait pas de check de mot. Cette condition est surtout là pour que l'avion continue son chemin sans qu'elle s'arrête à cause du input X et Y.
-        if(sendFlight == 1){
-            SendFlight();
-        }else{
-            CheckWordTaken();
-            UpdatePositionTeacherBox();
-        }
-
-        //On regarde si l'avion en papier existe pour pouvoir le lancer. Si il l'existe, on vérifie si il est sorti de l'écran. Sinon, il est prêt à être lancer.
-        if(game.stage.getActors().peek().getName().toString().contains(String.valueOf("PaperFlight"))) {
-            if(game.stage.getActors().peek().getY() > game.viewport.getScreenHeight()){
-                sendFlight = 0;
-                teacherWords.get(indexvisible).setVisible(true);
-                game.stage.getActors().pop(); // On supprime l'avion en papier
-                teacher.changeImageback(teacher.spriteTeacher.getX(),teacher.spriteTeacher.getY());
-            }else {
-                if (Gdx.input.getX() > 0 && Gdx.input.getX() < game.viewport.getScreenWidth() && game.viewport.getScreenHeight() - Gdx.input.getY() > teacher.spriteTeacher.getY() + teacher.spriteTeacher.getHeight() && game.viewport.getScreenHeight() - Gdx.input.getY() < game.viewport.getScreenHeight()) {
-                    sendFlight = 1;
+            //On regarde si l'avion en papier existe pour pouvoir le lancer. Si il l'existe, on vérifie si il est sorti de l'écran. Sinon, il est prêt à être lancer.
+            if (game.stage.getActors().peek().getName().toString().contains(String.valueOf("PaperFlight"))) {
+                if (game.stage.getActors().peek().getY() > game.viewport.getScreenHeight()) {
+                    sendFlight = 0;
+                    teacherWords.get(indexvisible).setVisible(true);
+                    game.stage.getActors().pop(); // On supprime l'avion en papier
+                    teacher.changeImageback(teacher.spriteTeacher.getX(), teacher.spriteTeacher.getY());
+                } else {
+                    if (Gdx.input.getX() > 0 && Gdx.input.getX() < game.viewport.getScreenWidth() && game.viewport.getScreenHeight() - Gdx.input.getY() > teacher.spriteTeacher.getY() + teacher.spriteTeacher.getHeight() && game.viewport.getScreenHeight() - Gdx.input.getY() < game.viewport.getScreenHeight()) {
+                        sendFlight = 1;
+                    }
                 }
             }
-        }
-        CheckCollision();
-        RemoveStudent();
+            CheckCollision();
+            RemoveStudent();
 
-        if(gameOver){
-            game.gotoGameOverScreen();
+            if (gameOver) {
+                game.gotoGameOverScreen();
+            }
         }
 
         game.stage.draw();
@@ -250,7 +288,7 @@ public class StudentInvadersPlayground implements Screen{
                                     if (box.toString().contains(String.valueOf(word.lblbox))) {
                                         CreatePaperFlight(word.idWord);
                                         box.setVisible(false);
-                                        indexvisible = box.getZIndex();
+                                        indexvisible = box.getZIndex() - 1;
                                     }
                                 }
                             }
@@ -266,8 +304,12 @@ public class StudentInvadersPlayground implements Screen{
 
         for(TeacherWords teacherword: teacherWords){
             if(!teacherword.known){
-                teacherword.setX(x);
-                x += teacherword.getWidth() + 50;
+                if(!game.stage.getActors().peek().getName().toString().contains(String.valueOf("PaperFlight")))
+                {
+                    teacherword.setX(x);
+                    teacherword.setVisible(true);
+                    x += teacherword.getWidth() + 50;
+                }
             }else{
                 //Si les mots qui sont connus ne sont pas déplacés, cela pose problème car deux blocs sont superposés et l'application prends en compte que l'ancien bloc et le nouveau qui est placé n'est pas pris en compte.
                 teacherword.setX(-500);
