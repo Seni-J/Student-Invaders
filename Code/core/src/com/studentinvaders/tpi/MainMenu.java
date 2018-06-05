@@ -2,10 +2,12 @@ package com.studentinvaders.tpi;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Net;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.net.HttpRequestBuilder;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -16,8 +18,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
+import java.util.ArrayList;
+
+import sun.reflect.generics.reflectiveObjects.LazyReflectiveObjectGenerator;
 
 /**
  * Created by Senistan.JEGARAJASIN on 15.05.2018.
@@ -36,6 +46,7 @@ public class MainMenu implements Screen {
 
     public MainMenu(StudentInvaders game) {
         VocProvider.load();
+
         this.game = game;
         viewport = new ScreenViewport();
 

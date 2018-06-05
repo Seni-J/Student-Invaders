@@ -1,44 +1,96 @@
 package com.studentinvaders.tpi;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net;
+import com.badlogic.gdx.net.HttpRequestBuilder;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonReader;
+import com.badlogic.gdx.utils.JsonValue;
+
 import java.util.ArrayList;
 
 /**
  * Created by Senistan.JEGARAJASIN on 17.05.2018.
+ * Réception des données du webservice pour ainsi les mettre dans un tableau respectif.
+ * @author Seni-J
+ * @version 1.0
  */
 
 public class VocProvider {
-    private static ArrayList<String> languages;
+    private static ArrayList<Languages> languages;
     private static ArrayList<Vocabulary> vocs;
     private static ArrayList<TeacherWords> teacherWords;
     private static ArrayList<StudentWords> studentWords;
 
     static public void load(){
-        languages = new ArrayList<String>();
-        languages.add("Français");
-        languages.add("Anglais");
-        languages.add("Allemand");
-        languages.add("Espagnol");
-
+        languages = new ArrayList<Languages>();
         vocs = new ArrayList<Vocabulary>();
-        Vocabulary voc1 = new Vocabulary(1,"Les Couleurs",1,2);
-        Vocabulary voc2 = new Vocabulary(2,"Le Restaurant",1,2);
-        Vocabulary voc3 = new Vocabulary(3,"Les affaires",1,2);
-        Vocabulary voc4 = new Vocabulary(4,"L'art",1,2);
-        Vocabulary voc5 = new Vocabulary(5,"Les couleurs",1,3);
-        Vocabulary voc6 = new Vocabulary(6,"Le Restaurant",1,3);
-        Vocabulary voc7 = new Vocabulary(7,"Les Affaires",2,3);
-        Vocabulary voc8 = new Vocabulary(8,"Le Restaurant",2,4);
-        vocs.add(voc1);
-        vocs.add(voc2);
-        vocs.add(voc3);
-        vocs.add(voc4);
-        vocs.add(voc5);
-        vocs.add(voc6);
-        vocs.add(voc7);
-        vocs.add(voc8);
 
-        teacherWords = new ArrayList<TeacherWords>();
-        studentWords = new ArrayList<StudentWords>();
+
+        if(languages.isEmpty()) {
+            HttpRequestBuilder requestLangues = new HttpRequestBuilder();
+            final Net.HttpRequest httpRequestLangues = requestLangues.newRequest().method(Net.HttpMethods.GET).url("http://voxerver.mycpnv.ch/api/v1/languages").build();
+            Gdx.net.sendHttpRequest(httpRequestLangues, new Net.HttpResponseListener() {
+                @Override
+                public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                    JsonReader jsonlangue = new JsonReader();
+                    JsonValue baselangue = jsonlangue.parse(httpResponse.getResultAsString());
+
+                    for (JsonValue langages : baselangue.iterator()) {
+                        Integer id = langages.getInt("lId");
+                        String lang = langages.getString("lName");
+                        languages.add(new Languages(id, lang));
+                    }
+                    Gdx.app.log("HttpRequestExample", "response: " + baselangue.toString());
+                }
+
+                @Override
+                public void failed(Throwable t) {
+                    Gdx.app.error("HttpRequestExample", "No connection", t);
+                }
+
+                @Override
+                public void cancelled() {
+                    Gdx.app.log("HttpRequestExample", "cancelled");
+                }
+            });
+        }
+
+        if(vocs.isEmpty()) {
+            HttpRequestBuilder requestVocs = new HttpRequestBuilder();
+            final Net.HttpRequest httpRequestVocs = requestVocs.newRequest().method(Net.HttpMethods.GET).url("http://voxerver.mycpnv.ch/api/v1/fullvocs").build();
+            Gdx.net.sendHttpRequest(httpRequestVocs, new Net.HttpResponseListener() {
+                @Override
+                public void handleHttpResponse(Net.HttpResponse httpResponse) {
+                    JsonReader json = new JsonReader();
+                    JsonValue base = json.parse(httpResponse.getResultAsString());
+
+                    for (JsonValue voc : base.iterator()) {
+                        Integer idVoc = voc.getInt("mId");
+                        String titleVoc = voc.getString("mTitle");
+                        Integer idLangTeacher = voc.getInt("mLang1");
+                        Integer idLangStudent = voc.getInt("mLang2");
+
+                        vocs.add(new Vocabulary(idVoc,titleVoc,idLangTeacher,idLangStudent));
+
+                        Gdx.app.log("Value",voc.getChild("Words").toString());
+                    }
+                }
+
+                @Override
+                public void failed(Throwable t) {
+                    Gdx.app.error("HttpRequestExample", "No connection", t);
+                }
+
+                @Override
+                public void cancelled() {
+                    Gdx.app.log("HttpRequestExample", "cancelled");
+                }
+            });
+        }
+
+
+/*
         TeacherWords wordsTeach1 = new TeacherWords(1,1264,"blanc", Words.wordType.Teacher);
         StudentWords wordsStud1 = new StudentWords(1,1264,"white", Words.wordType.Student);
         TeacherWords wordsTeach2 = new TeacherWords(1,1265,"bleu", Words.wordType.Teacher);
@@ -62,11 +114,11 @@ public class VocProvider {
         studentWords.add(wordsStud3);
         studentWords.add(wordsStud4);
         studentWords.add(wordsStud5);
-        studentWords.add(wordsStud6);
+        studentWords.add(wordsStud6);*/
 
 
     }
-    static public ArrayList<String> getLanguages(){
+    static public ArrayList<Languages> getLanguages(){
         return languages;
     }
 
