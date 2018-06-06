@@ -71,7 +71,7 @@ public class VocProvider {
                         Integer idLangTeacher = voc.getInt("mLang1");
                         Integer idLangStudent = voc.getInt("mLang2");
 
-                        vocs.add(new Vocabulary(idVoc,titleVoc,idLangTeacher,idLangStudent));
+                        Vocabulary newvoc = new Vocabulary(idVoc,titleVoc,idLangTeacher,idLangStudent);
 
                         JsonValue words = voc.get("Words");
 
@@ -81,8 +81,9 @@ public class VocProvider {
                             String wordTeacher = word.getString("mValue1");
                             String wordStudent = word.getString("mValue2");
 
-                            Vocabulary.addWords(new TeacherWords(idVoc, idWord, wordTeacher, Words.wordType.Teacher), new StudentWords(idVoc, idWord, wordStudent, Words.wordType.Student));
+                            newvoc.addWords(new TeacherWords(idVoc, idWord, wordTeacher, Words.wordType.Teacher), new StudentWords(idVoc, idWord, wordStudent, Words.wordType.Student));
                         }
+                        vocs.add(newvoc);
                     }
                 }
 
@@ -105,5 +106,9 @@ public class VocProvider {
 
     static public ArrayList<Vocabulary> getVocs(){
         return vocs;
+    }
+
+    static public Vocabulary getVoc(int vocid) {
+        return vocs.get(vocid);
     }
 }
