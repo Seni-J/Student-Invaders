@@ -83,8 +83,8 @@ public class StudentInvadersPlayground implements Screen {
         shapeRenderer = new ShapeRenderer();
 
 
-        teacherWords = VocProvider.getVoc(1).getTeacherWords();
-        studentWords = VocProvider.getVoc(1).getStudentWords();
+        teacherWords = VocProvider.getVoc(id -1).getTeacherWords();
+        studentWords = VocProvider.getVoc(id -1).getStudentWords();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.font;
@@ -168,6 +168,7 @@ public class StudentInvadersPlayground implements Screen {
         game.batch.begin();
         game.batch.draw(bg, 0, 0, game.viewport.getScreenWidth(), game.viewport.getScreenHeight());
         game.batch.end();
+
 
         if (paused) {
             lblPause.addListener(new InputListener() {
