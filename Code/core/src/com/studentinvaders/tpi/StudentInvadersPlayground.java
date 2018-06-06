@@ -80,11 +80,12 @@ public class StudentInvadersPlayground implements Screen{
 
         id = SelectLanguages.idVoc;
 
-
         shapeRenderer = new ShapeRenderer();
 
-        teacherWords = VocProvider.getTeacherWords();
-        studentWords = VocProvider.getStudentWords();
+
+        teacherWords = Vocabulary.teacherWords;
+        studentWords = Vocabulary.studentWords;
+
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.font;

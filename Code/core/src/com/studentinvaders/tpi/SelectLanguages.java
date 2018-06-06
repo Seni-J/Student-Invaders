@@ -118,6 +118,7 @@ public class SelectLanguages implements Screen {
         prof.draw(game.batch);
         game.batch.end();
 
+
         checkIfCollide();
 
         game.stage.draw();

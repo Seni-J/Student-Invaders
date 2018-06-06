@@ -14,8 +14,8 @@ public class Vocabulary {
     int langprof;
     int langeleve;
 
-    ArrayList<TeacherWords> teacherWords;
-    ArrayList<StudentWords> studentWords;
+    public static ArrayList<TeacherWords> teacherWords;
+    public static ArrayList<StudentWords> studentWords;
 
     Vocabulary(int id, String vocName, int langprof, int langeleve){
         this.id = id;
@@ -23,11 +23,20 @@ public class Vocabulary {
         this.langprof = langprof;
         this.langeleve = langeleve;
 
-        /*teacherWords = new ArrayList<TeacherWords>();
-        studentWords = new ArrayList<StudentWords>();*/
+        teacherWords = new ArrayList<TeacherWords>();
+        studentWords = new ArrayList<StudentWords>();
     }
 
-    public void addWord(){
+    public static void addWords(TeacherWords teacherWord, StudentWords studentword){
+        teacherWords.add(teacherWord);
+        studentWords.add(studentword);
+    }
 
+    public static ArrayList<TeacherWords> getTeacherWords() {
+        return teacherWords;
+    }
+
+    public static ArrayList<StudentWords> getStudentWords() {
+        return studentWords;
     }
 }
