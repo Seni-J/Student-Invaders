@@ -83,8 +83,8 @@ public class StudentInvadersPlayground implements Screen {
         shapeRenderer = new ShapeRenderer();
 
 
-        teacherWords = VocProvider.getVoc(id -1).getTeacherWords();
-        studentWords = VocProvider.getVoc(id -1).getStudentWords();
+        teacherWords = VocProvider.getVoc(id - 1).getTeacherWords();
+        studentWords = VocProvider.getVoc(id - 1).getStudentWords();
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = game.font;
@@ -92,10 +92,11 @@ public class StudentInvadersPlayground implements Screen {
         //Effacer les anciens acteurs (Labels).
         game.stage.getRoot().clearChildren();
 
-        lblPause = new Label("Pause",labelStyle);
+
+        lblPause = new Label("Pause", labelStyle);
         lblPause.setFontScale(.3f);
-        lblPause.setPosition(game.viewport.getScreenWidth() - 200,game.viewport.getScreenHeight() - 50);
-        lblPause.setSize(lblPause.getMinWidth(),lblPause.getMinHeight());
+        lblPause.setPosition(game.viewport.getScreenWidth() - 200, game.viewport.getScreenHeight() - 50);
+        lblPause.setSize(lblPause.getMinWidth(), lblPause.getMinHeight());
 
         lblPause.addListener(new InputListener() {
             @Override
@@ -113,34 +114,29 @@ public class StudentInvadersPlayground implements Screen {
 
         // Pour chaque mot du voc sélectionné, on crée des acteurs qu'on ajoute dans notre tableau boxTeacher pour les mots en bas.
         for (TeacherWords word : teacherWords) {
-            if (word.vocID == id)
-                if (word.type == Words.wordType.Teacher) {
-                    word.setBounds(word.box.getX(), word.box.getY(), word.box.getWidth(), word.box.getHeight());
-                    boxTeachers.add(word);
-                    if (boxTeachers.get(boxTeachers.size() - 1).getX() > game.viewport.getScreenWidth()) {
-                        boxTeachers.get(boxTeachers.size() - 1).setVisible(false);
-                    }
-                    boxTeachers.get(boxTeachers.size() - 1).setName(word.word);
-                    if (boxTeachers.size() < 2) {
-                        boxTeachers.get(0).setX(25);
-                    }
-                    if (boxTeachers.size() >= 2) {
-                        boxTeachers.get(boxTeachers.size() - 1).setPosition(boxTeachers.get(boxTeachers.size() - 2).getX() + boxTeachers.get(boxTeachers.size() - 2).getWidth() + 50, 0);
-                    }
-                }
+            word.setBounds(word.sprite.getX(), word.sprite.getY(), word.sprite.getWidth(), word.sprite.getHeight());
+            boxTeachers.add(word);
+            if (boxTeachers.get(boxTeachers.size() - 1).getX() > game.viewport.getScreenWidth()) {
+                boxTeachers.get(boxTeachers.size() - 1).setVisible(false);
+            }
+            boxTeachers.get(boxTeachers.size() - 1).setName(word.word);
+            if (boxTeachers.size() < 2) {
+                boxTeachers.get(0).setX(25);
+            }
+            if (boxTeachers.size() >= 2) {
+                boxTeachers.get(boxTeachers.size() - 1).setPosition(boxTeachers.get(boxTeachers.size() - 2).getX() + boxTeachers.get(boxTeachers.size() - 2).getWidth() + 50, 0);
+            }
         }
+
 
         //Ajout des élèves avec leurs positions
         int x = 500;
         int y = game.viewport.getScreenHeight() - 200;
         for (StudentWords word : studentWords) {
-            if (word.vocID == id) {
-                if (word.type == Words.wordType.Student) {
-                    boxStudents.add(word);
-                    boxStudents.get(boxStudents.size() - 1).setPosition(x, y);
-                    x += 150;
-                }
-            }
+            boxStudents.add(word);
+            boxStudents.get(boxStudents.size() - 1).setPosition(x, y);
+            x += 150;
+
         }
 
         // Ajout d'acteur dans le tableau boxTeachers.
