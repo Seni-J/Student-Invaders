@@ -29,8 +29,7 @@ public class Words extends Group{
 
     int vocID;
     int idWord;
-    Sprite box;
-    public static Sprite student;
+    protected Sprite sprite;
     Label lblbox;
     BitmapFont font;
     String word;
@@ -50,26 +49,26 @@ public class Words extends Group{
         //Switch pour différencier les mots si ils sont pour le prof ou pour l'élève.
         switch (type){
             case Teacher:
-                this.box = new Sprite(new Texture("Game/Box.png"));
+                this.sprite = new Sprite(new Texture("Game/Box.png"));
                 lblbox = new Label(word,labelStyle);
                 lblbox.setFontScale(.3f);
-                lblbox.setBounds(this.box.getX(),this.box.getY(),this.box.getWidth(),this.box.getHeight());
+                lblbox.setBounds(this.sprite.getX(),this.sprite.getY(),this.sprite.getWidth(),this.sprite.getHeight());
                 lblbox.setAlignment(Align.center);
-                addActor(new Image(new SpriteDrawable(box)));
-                addActor(lblbox);
                 break;
             case Student:
-                this.student = new Sprite(new Texture("Game/Eleve.png"));
-                this.student.setBounds(this.student.getX(),this.student.getY(),this.student.getWidth()/5,this.student.getHeight()/5);
+                this.sprite = new Sprite(new Texture("Game/Eleve.png"));
+                this.sprite.setBounds(this.sprite.getX(),this.sprite.getY(),this.sprite.getWidth()/5,this.sprite.getHeight()/5);
                 lblbox = new Label(word,labelStyle);
                 lblbox.setFontScale(.19f);
-                lblbox.setBounds(this.student.getX(),this.student.getY(),this.student.getWidth(),this.student.getHeight());
+                lblbox.setBounds(this.sprite.getX(),this.sprite.getY(),this.sprite.getWidth(),this.sprite.getHeight());
                 lblbox.setAlignment(Align.bottom);
-                addActor(new Image(new SpriteDrawable(student)));
-                addActor(lblbox);
                 break;
         }
+
+        addActor(new Image(new SpriteDrawable(sprite)));
+        addActor(lblbox);
     }
+
 
 
     @Override

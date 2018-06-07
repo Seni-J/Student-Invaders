@@ -55,7 +55,7 @@ public class StudentWords extends Words {
         }
         if (state == stateRight) {
             this.moveBy(2f, 0);
-            if (this.getX() + Words.student.getWidth() > game.viewport.getScreenWidth() - 50) {
+            if (this.getX() + this.sprite.getWidth() > game.viewport.getScreenWidth() - 50) {
                 state = stateDown;
                 wasLastStateLeft = false;
             }
@@ -63,7 +63,7 @@ public class StudentWords extends Words {
         if (state == stateDown) {
             if (this.getX() > 1 && wasLastStateLeft) {
                 moveBy(-2f, -1f);
-            } else if (this.getX() + Words.student.getWidth() < game.viewport.getScreenWidth() && !wasLastStateLeft) {
+            } else if (this.getX() + this.sprite.getWidth() < game.viewport.getScreenWidth() && !wasLastStateLeft) {
                 moveBy(2f, -1f);
             } else {
                 if (wasLastStateLeft)

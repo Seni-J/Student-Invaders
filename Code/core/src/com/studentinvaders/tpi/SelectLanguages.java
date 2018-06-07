@@ -40,7 +40,7 @@ public class SelectLanguages implements Screen {
 
     Group grpVoc;
 
-    ArrayList<String> langues;
+    ArrayList<Languages> langues;
     ArrayList<Vocabulary> vocabulaires;
     int ylang = 450;
     int yvoc = 450;
@@ -66,6 +66,7 @@ public class SelectLanguages implements Screen {
         vocabulaires = VocProvider.getVocs();
         grpVoc = new Group();
 
+
         bg = new Texture("Select/bg-couloirs.png");
         prof = new Sprite(new Texture("Select/Prof.png"));
         eleve = new Sprite(new Texture("Select/Eleve.png"));
@@ -87,8 +88,8 @@ public class SelectLanguages implements Screen {
         game.stage.addActor(choixLangues);
 
 
-        for (String langue: langues) {
-            final Label lbllangue = new Label(langue,labelStyle);
+        for (Languages langue: langues) {
+            final Label lbllangue = new Label(langue.langue,labelStyle);
             lbllangue.setFontScale(.3f);
             lbllangue.setPosition(400,ylang);
             lbllangue.setSize(lbllangue.getMinWidth(),lbllangue.getMinHeight());
@@ -100,7 +101,7 @@ public class SelectLanguages implements Screen {
             });
             ylang -= 100;
             game.stage.addActor(lbllangue);
-            game.stage.getActors().peek().setName(langue);
+            game.stage.getActors().peek().setName(langue.langue);
         }
     }
 
@@ -116,6 +117,7 @@ public class SelectLanguages implements Screen {
         eleve.draw(game.batch);
         prof.draw(game.batch);
         game.batch.end();
+
 
         checkIfCollide();
 
@@ -164,9 +166,9 @@ public class SelectLanguages implements Screen {
         langueChoisiEleve.setPosition(0, 10);
         langueChoisiEleve.setSize(langueChoisiEleve.getMinWidth(), langueChoisiEleve.getMinHeight());
 
-        // Fix issue when
+        // Rajout des labels pour les langues choisies mais qu'une seule fois.
         if(once){
-            if (game.stage.getActors().get(game.stage.getActors().size - 1).toString().contains(String.valueOf(langues.get(langues.size() - 1)))) {
+            if (game.stage.getActors().get(game.stage.getActors().size - 1).toString().contains(langues.get(langues.size() - 1).langue)) {
                 game.stage.addActor(langueChoisiProf);
                 game.stage.addActor(langueChoisiEleve);
             }
@@ -181,15 +183,18 @@ public class SelectLanguages implements Screen {
         }
 
         //Check si il y a une collision entre le prof et la langue ou l'élève et la langue.
-        for(String langue : langues){
+        for(Languages langue : langues){
+            // on rajoute un +1 car il y a l'acteur "Choix des langues".
             i = 1 + langues.indexOf(langue);
+
             Rectangle langueRect = new Rectangle(game.stage.getActors().get(i).getX(),game.stage.getActors().get(i).getY(),
                     game.stage.getActors().get(i).getWidth(),game.stage.getActors().get(i).getHeight());
 
+
             if(profRect.overlaps(langueRect)) {
-                proflangue = i;
+                proflangue = langue.id;
                 if (!game.stage.getActors().peek().toString().contains(String.valueOf("JOUER"))) {
-                    langueChoisiProf.setText("Langue choisie pour le prof: " + langue);
+                    langueChoisiProf.setText("Langue choisie pour le prof: " + langue.langue);
                     if (!game.stage.getActors().get(game.stage.getActors().size - 2).toString().contains(String.valueOf(langueChoisiProf))) {
                         game.stage.getActors().get(game.stage.getActors().size - 2).remove();
                         game.stage.addActor(langueChoisiProf);
@@ -199,9 +204,9 @@ public class SelectLanguages implements Screen {
             }
 
             if(eleveRect.overlaps(langueRect)) {
-                elevelangue = i;
+                elevelangue = langue.id;
                 if (!game.stage.getActors().peek().toString().contains(String.valueOf("JOUER"))) {
-                    langueChoisiEleve.setText("Langue choisie pour l'élève: " + langue);
+                    langueChoisiEleve.setText("Langue choisie pour l'élève: " + langue.langue);
                     if (!game.stage.getActors().peek().toString().contains(String.valueOf(langueChoisiEleve))) {
                         game.stage.getActors().pop();
                         game.stage.addActor(langueChoisiEleve);
