@@ -22,7 +22,7 @@ Le projet est de réaliser un jeu sous Android. Il ressemble au jeu d'arcade tr�
 
 *Branchez votre appareil à l'ordinateur et précisez sur votre appareil que vous l'utilisez comme transfert de fichier.*
 
-1.  Téléchargez le fichier apk qui se situe dans le dossier "APK".
+1.  Téléchargez le fichier apk qui se situe à la racine du du repository.
 
 2.  Déplacez le fichier téléchargé dans un dossier de votre smartphone (Le dossier "Download" est facile d'accès).
 
