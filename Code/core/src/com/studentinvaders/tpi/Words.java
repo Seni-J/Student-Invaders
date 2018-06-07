@@ -36,35 +36,16 @@ public class Words extends Group{
     wordType type;
     boolean angry = false;
 
-    public Words(int vocID, int idWord, String word,wordType type){
+    public Words(int vocID, int idWord, String word){
         this.vocID = vocID;
         this.idWord = idWord;
         this.word = word;
-        this.type = type;
 
         font = new BitmapFont(Gdx.files.internal("Font/KGWTW.fnt"));
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
 
-        //Switch pour différencier les mots si ils sont pour le prof ou pour l'élève.
-        switch (type){
-            case Teacher:
-                this.sprite = new Sprite(new Texture("Game/Box.png"));
-                lblbox = new Label(word,labelStyle);
-                lblbox.setFontScale(.3f);
-                lblbox.setBounds(this.sprite.getX(),this.sprite.getY(),this.sprite.getWidth(),this.sprite.getHeight());
-                lblbox.setAlignment(Align.center);
-                break;
-            case Student:
-                this.sprite = new Sprite(new Texture("Game/Eleve.png"));
-                this.sprite.setBounds(this.sprite.getX(),this.sprite.getY(),this.sprite.getWidth()/5,this.sprite.getHeight()/5);
-                lblbox = new Label(word,labelStyle);
-                lblbox.setFontScale(.19f);
-                lblbox.setBounds(this.sprite.getX(),this.sprite.getY(),this.sprite.getWidth(),this.sprite.getHeight());
-                lblbox.setAlignment(Align.bottom);
-                break;
-        }
-
+        lblbox = new Label(word,labelStyle);
         addActor(new Image(new SpriteDrawable(sprite)));
         addActor(lblbox);
     }

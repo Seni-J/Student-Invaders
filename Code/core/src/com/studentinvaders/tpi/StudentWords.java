@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 
 /**
  * Created by Senistan.JEGARAJASIN on 24.05.2018.
@@ -35,10 +37,14 @@ public class StudentWords extends Words {
      * @param vocID = id du vocabulaire
      * @param idWord = id du mot
      * @param word = Mot de l'élève
-     * @param type = Le type pour le mot (Prof ou élève). Un seul type possible dans ce cas, l'élève.
      */
-    public StudentWords(int vocID, int idWord, String word,wordType type){
-        super(vocID,idWord,word,type);
+    public StudentWords(int vocID, int idWord, String word){
+        super(vocID,idWord,word);
+        this.sprite = new Sprite(new Texture("Game/Eleve.png"));
+        this.sprite.setBounds(this.sprite.getX(),this.sprite.getY(),this.sprite.getWidth()/5,this.sprite.getHeight()/5);
+        lblbox.setFontScale(.19f);
+        lblbox.setBounds(this.sprite.getX(),this.sprite.getY(),this.sprite.getWidth(),this.sprite.getHeight());
+        lblbox.setAlignment(Align.bottom);
     }
 
 

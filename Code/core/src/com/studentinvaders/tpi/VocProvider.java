@@ -81,7 +81,7 @@ public class VocProvider {
                             String wordTeacher = word.getString("mValue1");
                             String wordStudent = word.getString("mValue2");
 
-                            newvoc.addWords(new TeacherWords(idVoc, idWord, wordTeacher, Words.wordType.Teacher), new StudentWords(idVoc, idWord, wordStudent, Words.wordType.Student));
+                            newvoc.addWords(new TeacherWords(idVoc, idWord, wordTeacher), new StudentWords(idVoc, idWord, wordStudent));
                         }
                         vocs.add(newvoc);
                     }

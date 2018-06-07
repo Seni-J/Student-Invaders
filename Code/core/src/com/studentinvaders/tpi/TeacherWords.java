@@ -1,5 +1,9 @@
 package com.studentinvaders.tpi;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.utils.Align;
+
 /**
  * Created by Senistan.JEGARAJASIN on 25.05.2018.
  * @author Seni-J
@@ -16,10 +20,13 @@ public class TeacherWords extends Words {
      * @param vocID = id du vocabulaire
      * @param idWord = id du mot
      * @param word = Mot de l'élève
-     * @param type = Le type pour le mot (Prof ou élève). Un seul type possible dans ce cas, le prof.
      */
-    public TeacherWords(int vocID, int idWord, String word,wordType type){
-        super(vocID,idWord,word,type);
+    public TeacherWords(int vocID, int idWord, String word){
+        super(vocID,idWord,word);
         this.known = false;
+        this.sprite = new Sprite(new Texture("Game/Box.png"));
+        lblbox.setFontScale(.3f);
+        lblbox.setBounds(this.sprite.getX(),this.sprite.getY(),this.sprite.getWidth(),this.sprite.getHeight());
+        lblbox.setAlignment(Align.center);
     }
 }

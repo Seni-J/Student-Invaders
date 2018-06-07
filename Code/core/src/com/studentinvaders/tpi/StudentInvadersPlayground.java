@@ -39,8 +39,7 @@ public class StudentInvadersPlayground implements Screen {
 
     ArrayList<TeacherWords> teacherWords;
     ArrayList<StudentWords> studentWords;
-    ArrayList<Words> boxTeachers;
-    ArrayList<Words> boxStudents;
+
 
     Texture bg;
     Texture boxTexture;
@@ -75,8 +74,6 @@ public class StudentInvadersPlayground implements Screen {
         rightSide = new Rectangle();
         paperFlight = new Rectangle();
         studentrect = new Rectangle();
-        boxTeachers = new ArrayList<Words>();
-        boxStudents = new ArrayList<Words>();
 
         id = SelectLanguages.idVoc;
 
@@ -112,42 +109,37 @@ public class StudentInvadersPlayground implements Screen {
         leftSide.set(0, teacher.getY(), 200, teacher.spriteTeacher.getHeight());
         rightSide.set(game.viewport.getScreenWidth() - 200, teacher.getY(), 200, teacher.spriteTeacher.getHeight());
 
+        int xBox = 50;
+
         // Pour chaque mot du voc sélectionné, on crée des acteurs qu'on ajoute dans notre tableau boxTeacher pour les mots en bas.
         for (TeacherWords word : teacherWords) {
             word.setBounds(word.sprite.getX(), word.sprite.getY(), word.sprite.getWidth(), word.sprite.getHeight());
-            boxTeachers.add(word);
-            if (boxTeachers.get(boxTeachers.size() - 1).getX() > game.viewport.getScreenWidth()) {
-                boxTeachers.get(boxTeachers.size() - 1).setVisible(false);
+            game.stage.addActor(word);
+            if (word.getX() > game.viewport.getScreenWidth()) {
+                word.setVisible(false);
             }
-            boxTeachers.get(boxTeachers.size() - 1).setName(word.word);
-            if (boxTeachers.size() < 2) {
-                boxTeachers.get(0).setX(25);
+            word.setName(word.word);
+            if (teacherWords.size() < 2) {
+                teacherWords.get(0).setX(25);
             }
-            if (boxTeachers.size() >= 2) {
-                boxTeachers.get(boxTeachers.size() - 1).setPosition(boxTeachers.get(boxTeachers.size() - 2).getX() + boxTeachers.get(boxTeachers.size() - 2).getWidth() + 50, 0);
+            if (teacherWords.size() >= 2) {
+                word.setPosition(xBox, 0);
             }
+            xBox += (word.getWidth() + 50);
         }
+
 
 
         //Ajout des élèves avec leurs positions
         int x = 500;
         int y = game.viewport.getScreenHeight() - 200;
         for (StudentWords word : studentWords) {
-            boxStudents.add(word);
-            boxStudents.get(boxStudents.size() - 1).setPosition(x, y);
+            word.setWidth(word.sprite.getWidth()/5);
+            word.setHeight(word.sprite.getHeight()/5);
+            game.stage.addActor(word);
+            word.setPosition(x,y);
             x += 150;
 
-        }
-
-        // Ajout d'acteur dans le tableau boxTeachers.
-        for (Words boxTeacher : boxTeachers) {
-            game.stage.addActor(boxTeacher);
-        }
-
-        for (Words boxStudent : boxStudents) {
-            boxStudent.setHeight(new Texture("Game/Eleve.png").getHeight() / 5);
-            boxStudent.setWidth(new Texture("Game/Eleve.png").getWidth() / 5);
-            game.stage.addActor(boxStudent);
         }
 
         game.stage.addActor(teacher);
@@ -284,21 +276,15 @@ public class StudentInvadersPlayground implements Screen {
         if (Gdx.input.getX() > 0 && Gdx.input.getX() < game.viewport.getScreenWidth() && game.viewport.getScreenHeight() - Gdx.input.getY() > 0 && game.viewport.getScreenHeight() - Gdx.input.getY() < 100) {
             // Cette condition est nécessaire pour éviter une fuite de mémoire.
             if (!game.stage.getActors().peek().getName().contains(String.valueOf("PaperFlight"))) {
-                for (Words box : boxTeachers) {
+                for (Words box : teacherWords) {
                     if (Gdx.input.getX() > box.getX() && Gdx.input.getX() < box.getX() + box.getWidth()) {
                         if (teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() > box.getX()
                                 && teacher.spriteTeacher.getX() + teacher.spriteTeacher.getHeight() < box.getX() + box.getWidth()) {
                             if (teacher.spriteTeacher != teacherBack) {
                                 teacher.changeImage(teacher.spriteTeacher.getX(), teacher.spriteTeacher.getY());
-                            }
-                            for (TeacherWords word : teacherWords) {
-                                if (!game.stage.getActors().peek().getName().contains(String.valueOf("PaperFlight"))) {
-                                    if (box.toString().contains(String.valueOf(word.lblbox))) {
-                                        CreatePaperFlight(word.idWord);
-                                        box.setVisible(false);
-                                        indexvisible = box.getZIndex() - 1;
-                                    }
-                                }
+                                CreatePaperFlight(box.idWord);
+                                box.setVisible(false);
+                                indexvisible = box.getZIndex() - 1;
                             }
                         }
                     }
@@ -350,7 +336,7 @@ public class StudentInvadersPlayground implements Screen {
      * Méthode de vérification de collision entre l'avion en papier et l'élève ou le prof et l'élève.
      */
     public void CheckCollision() {
-        for (Words student : boxStudents) {
+        for (Words student : studentWords) {
             studentrect.set(student.getX(), student.getY(), student.getWidth(), student.getHeight());
             if (teacher.spriteTeacher.getBoundingRectangle().overlaps(studentrect)) {
                 gameOver = true;
@@ -396,7 +382,7 @@ public class StudentInvadersPlayground implements Screen {
      * Méthode qui supprime un élève qui est en dehors de l'écran.
      */
     public void RemoveStudent() {
-        for (Words student : boxStudents) {
+        for (Words student : studentWords) {
             if (student.getX() < 10 && student.getY() > game.viewport.getScreenHeight()) {
                 student.remove();
             }
